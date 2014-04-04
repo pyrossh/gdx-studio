@@ -1,0 +1,33 @@
+
+tic.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+quitbutton
+  rotate: false
+  xy: 1, 1
+  size: 400, 100
+  orig: 400, 100
+  offset: 0, 0
+  index: -1
+o
+  rotate: false
+  xy: 403, 1
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+square
+  rotate: false
+  xy: 505, 1
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+x
+  rotate: false
+  xy: 607, 1
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1

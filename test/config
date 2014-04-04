@@ -1,0 +1,19 @@
+{
+title: Game1,
+version: "0.45",
+hasIcon: true,
+targetSize: "860x650",
+screenSize: "860x650",
+audioBufferCount: "10",
+resize: "false",
+forceExit: "false",
+fullScreen: "false",
+useGL20: "false",
+vSync: "false",
+disableAudio: "false",
+keepAspectRatio: "false",
+showFPS: "true",
+loggingEnabled: "true",
+project: "C:/CODE/RpgIDE/test/",
+target: Android
+}

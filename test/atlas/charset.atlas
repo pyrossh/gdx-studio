@@ -1,0 +1,313 @@
+
+charset.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+porcalais
+  rotate: false
+  xy: 0, 4
+  size: 60, 60
+  orig: 60, 60
+  offset: 0, 0
+  index: -1
+porsabra
+  rotate: false
+  xy: 60, 4
+  size: 60, 60
+  orig: 60, 60
+  offset: 0, 0
+  index: -1
+porgarett
+  rotate: false
+  xy: 120, 4
+  size: 60, 60
+  orig: 60, 60
+  offset: 0, 0
+  index: -1
+portiberon
+  rotate: false
+  xy: 180, 4
+  size: 60, 60
+  orig: 60, 60
+  offset: 0, 0
+  index: -1
+poralfador
+  rotate: false
+  xy: 240, 4
+  size: 60, 60
+  orig: 60, 60
+  offset: 0, 0
+  index: -1
+porbaldarov
+  rotate: false
+  xy: 300, 4
+  size: 60, 60
+  orig: 60, 60
+  offset: 0, 0
+  index: -1
+porserpentknight
+  rotate: false
+  xy: 360, 4
+  size: 60, 60
+  orig: 60, 60
+  offset: 0, 0
+  index: -1
+porlord
+  rotate: false
+  xy: 420, 4
+  size: 60, 60
+  orig: 60, 60
+  offset: 0, 0
+  index: -1
+porwizard
+  rotate: false
+  xy: 480, 4
+  size: 60, 60
+  orig: 60, 60
+  offset: 0, 0
+  index: -1
+baldarov01
+  rotate: false
+  xy: 540, 48
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+calais00
+  rotate: false
+  xy: 540, 32
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+calais01
+  rotate: false
+  xy: 540, 32
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+earcher
+  rotate: false
+  xy: 556, 48
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+esoldier
+  rotate: false
+  xy: 540, 16
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+garett01
+  rotate: false
+  xy: 540, 0
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+garett00
+  rotate: false
+  xy: 556, 32
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+lord00
+  rotate: false
+  xy: 572, 48
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+lord01
+  rotate: false
+  xy: 572, 48
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+merman
+  rotate: false
+  xy: 556, 16
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+psoldier
+  rotate: false
+  xy: 556, 0
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+sabra00
+  rotate: false
+  xy: 572, 32
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+sabra01
+  rotate: false
+  xy: 572, 32
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+baldarov00
+  rotate: false
+  xy: 588, 48
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+mina
+  rotate: false
+  xy: 572, 16
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+citizen
+  rotate: false
+  xy: 572, 0
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+serpentknight00
+  rotate: false
+  xy: 588, 32
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+serpentknight01
+  rotate: false
+  xy: 588, 32
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+shaka
+  rotate: false
+  xy: 604, 48
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+tribeman
+  rotate: false
+  xy: 588, 16
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+alfador00
+  rotate: false
+  xy: 588, 0
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+alfador01
+  rotate: false
+  xy: 588, 0
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+tiberon00
+  rotate: false
+  xy: 604, 32
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+tiberon01
+  rotate: false
+  xy: 604, 32
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+pguardian
+  rotate: false
+  xy: 620, 48
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+elemental
+  rotate: false
+  xy: 604, 16
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+wizard00
+  rotate: false
+  xy: 604, 0
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+wizard01
+  rotate: false
+  xy: 604, 0
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+lizardman
+  rotate: false
+  xy: 620, 32
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+771
+  rotate: false
+  xy: 636, 57
+  size: 7, 7
+  orig: 7, 7
+  offset: 0, 0
+  index: -1
+772
+  rotate: false
+  xy: 620, 25
+  size: 7, 7
+  orig: 7, 7
+  offset: 0, 0
+  index: -1
+775
+  rotate: false
+  xy: 636, 50
+  size: 7, 7
+  orig: 7, 7
+  offset: 0, 0
+  index: -1
+661
+  rotate: false
+  xy: 643, 58
+  size: 6, 6
+  orig: 6, 6
+  offset: 0, 0
+  index: -1
+662
+  rotate: false
+  xy: 620, 19
+  size: 6, 6
+  orig: 6, 6
+  offset: 0, 0
+  index: -1
+663
+  rotate: false
+  xy: 627, 26
+  size: 6, 6
+  orig: 6, 6
+  offset: 0, 0
+  index: -1

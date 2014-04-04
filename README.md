@@ -1,8 +1,7 @@
-GdxStudio 0.6.5
+GdxStudio 0.7.1
 ================
-GdxStudio is a tool for creating awesome games using libGdx. It is written in Java using Swing, libgdx,
-WebLookandfeel and RSyntaxTextArea. It has similar features of Xcode. It has all the features of libgdx
-built-in so you can easily,start creating games with it. Tools like Hiero Font Editor, Particle Editor,
+GdxStudio is used for creating awesome games using libGdx. It has all the features of libgdx
+built-in so you can easily,start creating games with it. Tools like Font Editor, Particle Editor,
 Texture Packer, SceneEditor, MapEditor, ActorEditor, ImagingTools are already built into it. 
 It also has a powerful Game Framework based on libGDX inbuilt which allows the game coder 
 to concentrate on the logic of the game and not bother about setting up assets or configuration. 
@@ -11,6 +10,8 @@ It has the Latest Nightly Version of libGdx inside it so you don't need to downl
 when exporting your game to jar for desktop it automatically loads these libraries into it.
 
 >**Disclaimer**  This is not an official libdgx project so don't ask them for bug fixes  
+
+[See the Wiki for more details](https://github.com/pyros2097/GdxStudio/wiki)  
 
 Features
 ---------
