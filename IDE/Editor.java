@@ -28,7 +28,7 @@ final public class Editor extends TextEditorPane {
 	static DefaultCompletionProvider provider = new DefaultCompletionProvider();
 	public static SearchContext context = new SearchContext(); 
 	
-	final Timer saveTimer = new Timer(30000, new ActionListener(){
+	final private Timer saveTimer = new Timer(60000, new ActionListener(){
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			save();
@@ -38,6 +38,7 @@ final public class Editor extends TextEditorPane {
 	
 	public Editor(){
 		super(TextEditorPane.INSERT_MODE, true);
+		saveTimer.start();
         setMargin(new Insets(0, 0, 0, 0));
         setMarginLineEnabled(true);
         setMarginLineColor(new Color(248,248,248)); //FIXME color not changing

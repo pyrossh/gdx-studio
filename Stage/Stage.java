@@ -4,7 +4,7 @@ import java.awt.Toolkit;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Files.FileType;
-import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
@@ -120,6 +120,7 @@ public final class Stage implements ApplicationListener {
 	private static OrthographicCamera camera;
 	private static Label fpsLabel;
 	private static Stage3d stage3d;
+	public static InputMultiplexer inputMux = new InputMultiplexer();
 	private static CameraInputController camController;
 	public static boolean use3d = true;
 	
@@ -229,14 +230,13 @@ public final class Stage implements ApplicationListener {
 		camera.setToOrtho(false, targetWidth, targetHeight);
 		camera.position.set(targetWidth/2, targetHeight/2, 0);
 		stage2d.setCamera(camera);
-		Gdx.input.setCatchBackKey(true);
- 		Gdx.input.setCatchMenuKey(true);
- 		Gdx.input.setInputProcessor(stage2d);
+		inputMux.addProcessor(stage2d);
  		stage2d.addListener(touchInput);
  		if(use3d){
  			stage3d = new Stage3d();
 	 		camController = new CameraInputController(stage3d.getCamera());
-	 		//Gdx.input.setInputProcessor(camController);
+	 		inputMux.addProcessor(stage3d);
+	 		inputMux.addProcessor(camController);
  		}
  		shapeRenderer = new ShapeRenderer();
  		Serializer.initialize();
@@ -246,6 +246,9 @@ public final class Stage implements ApplicationListener {
  		setScene(Scene.scenesMap.firstKey());
  		xlines = (int)Gdx.graphics.getWidth()/dots;
  		ylines = (int)Gdx.graphics.getHeight()/dots;
+ 		Gdx.input.setCatchBackKey(true);
+ 		Gdx.input.setCatchMenuKey(true);
+ 		Gdx.input.setInputProcessor(inputMux);
 	}
 	
 	/*
@@ -262,14 +265,14 @@ public final class Stage implements ApplicationListener {
 		Gdx.gl.glClearColor(bgColor.r, bgColor.g, bgColor.b, bgColor.a);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT |GL20.GL_DEPTH_BUFFER_BIT);
 		Asset.load();
-		stage2d.act();//Gdx.graphics.getDeltaTime();
-		stage2d.draw();
-		updateController();
 		if(use3d){
 			stage3d.act();
 	    	stage3d.draw();
 	    	camController.update();
 		}
+		stage2d.act();//Gdx.graphics.getDeltaTime();
+		stage2d.draw();
+		updateController();
 		if(debug){
 			shapeRenderer.begin(ShapeType.Point);
 			shapeRenderer.setColor(Color.BLACK);
@@ -359,10 +362,6 @@ public final class Stage implements ApplicationListener {
 		return stage2d.getRoot();
 	}
 	
-	public static void clearAllListeners(){
-		hudActors.clear();
-	}
-	
 	/**
 	 * Get screen time from start in format of HH:MM:SS. It is calculated from
 	 * "secondsTime" parameter.
@@ -409,6 +408,7 @@ public final class Stage implements ApplicationListener {
 		stage2d.getRoot().setPosition(0, 0);
 		stage2d.getRoot().setSize(targetWidth, targetHeight);
 		stage2d.getRoot().setBounds(0,0,targetWidth,targetHeight);
+		stage2d.getRoot().setCullingArea(getBounds(stage2d.getRoot()));
 		stage2d.getRoot().setColor(1f, 1f, 1f, 1f);
 		stage2d.getRoot().setVisible(true);
 		stage3d.getRoot().setPosition(0, 0, 0);
@@ -501,12 +501,15 @@ public final class Stage implements ApplicationListener {
 	}
 	
 	public static void addActor(Actor actor){
-		stage2d.addActor(actor);
+		if(actor != null)
+			stage2d.addActor(actor);
 	}
 	
 	public static void addActor(Actor actor, float x, float y){
-		actor.setPosition(x, y);
-		stage2d.addActor(actor);
+		if(actor != null){
+			actor.setPosition(x, y);
+			stage2d.addActor(actor);
+		}
 	}
 	
 	public static void addActorWithDelay(final Actor actor, float delay){
@@ -521,8 +524,10 @@ public final class Stage implements ApplicationListener {
 	/* If you want to make any elements/actors to move along with the camera 
 	* like HUD's add them using this method */
 	public static void addHud(Actor actor){
-		addActor(actor);
-		hudActors.add(actor);
+		if(actor != null){
+			addActor(actor);
+			hudActors.add(actor);
+		}
 	}
 	
 	/* If you want to any elements/actors which was a Hud the use this */
@@ -589,7 +594,7 @@ public final class Stage implements ApplicationListener {
 	public static void clear(){
 		if(currentScene != null)
 			currentScene.onDispose();
-		disablePanning();
+		usePan = false;
 		followActor(null);
 		hudActors.clear();
 		resetCamera();
@@ -636,7 +641,7 @@ public final class Stage implements ApplicationListener {
 		dialog.button("No", "No");
 		dialog.pack();
 		dialog.show(stage2d);
-		//if(dialog.result().equals("Yes")) //update Gdx
+		//if(dialog.result().equals("Yes")) FIXME update Gdx
 		//	return true;
 		return false;
 	}
@@ -651,7 +656,6 @@ public final class Stage implements ApplicationListener {
     private static float lastPercent;
     private static float percentDelta;
     private static float panSpeedX, panSpeedY;
-    //private static final Vector3 mousePos = new Vector3();
     
     public void moveTo(float x, float y) {
         moveTo(x, y, 0f);
@@ -790,10 +794,8 @@ public final class Stage implements ApplicationListener {
     	mouse.y = Gdx.graphics.getHeight() - Gdx.input.getY();
     	if(!moveCompleted)
     		moveByAction(stateTime);
-    	if(hasControl){
-			if(Config.usePan) panCameraWithMouse();
-			if(Config.useKeyboard) panCameraWithKeyboard();
-		}
+		if(usePan) 
+			panCameraWithMouse();
 		if(followedActor != null)
 			follow();
     }
@@ -801,29 +803,7 @@ public final class Stage implements ApplicationListener {
 /***********************************************************************************************************
 * 					2d Controller Related Functions												   	       *
 ************************************************************************************************************/	
-    private static boolean hasControl = false;
-    
-    /*
-	 * This will allow you to move the camera using the keyboard key up, left, right, down 
-	 * when Config.useKeyboard is true.
-	 * This will allow you to move the camera using the mouse when the mouse reaches the edges of the screen
-	 * when Config.usePan is true.
-	 * This will allow you to move the camera using the mouse when dragging the mouse
-	 * when Config.useDrag is true.
-	 */
-    public static void enablePanning(){
-    	hasControl = true;
-    }
-    
-    /*
-     * This disables all automatic panning and moving of camera
-     */
-    public static void disablePanning(){
-    	hasControl = false;
-    }
-    
-	
-    
+    public static boolean usePan;
     private float panSpeed = 5f;
     private float panXLeftOffset = 100;
 	private float panXRightOffset = 0;//Gdx.graphics.getWidth() - 100;
@@ -870,21 +850,6 @@ public final class Stage implements ApplicationListener {
     	else if(mouse.x < panXLeftOffset && camera.position.x > camOffsetX +5)  moveBy(-1f, 0, panSpeed);
     	else if(mouse.y < panYUpOffset && camera.position.y < mapOffsetY -5) moveBy(0, 1f, panSpeed);
     	else if(mouse.y > panYDownOffset && camera.position.y > camOffsetYBot +5) moveBy(0, -1f, panSpeed);
-    }
-    	
-    private void panCameraWithKeyboard(){
-    	if(Gdx.input.isKeyPressed(Keys.LEFT))
-    		//if(camera.position.x > camOffsetX +5)
-    			moveBy(-panSpeed, 0);
-    	else if(Gdx.input.isKeyPressed(Keys.RIGHT))
-    		//if(camera.position.x < mapOffsetX - 5)
-    			moveBy(panSpeed, 0);
-    	else if(Gdx.input.isKeyPressed(Keys.UP))
-    		//if(camera.position.y < mapOffsetY -5)
-    			moveBy(0, panSpeed);
-    	else if(Gdx.input.isKeyPressed(Keys.DOWN))
-    		//if(camera.position.y > camOffsetYBot +5)
-    			moveBy(0, -panSpeed);
     }
 	
 	/* 
@@ -986,7 +951,6 @@ public final class Stage implements ApplicationListener {
     	
 		@Override
 		public boolean touchDown(InputEvent event, float x, float y, int pointer, int button){
-			super.touchDown(event, x, y, pointer, button);
 			mouse.set(x, y);
 			Stage.pointer = pointer;
 			Stage.button = button;
@@ -996,7 +960,7 @@ public final class Stage implements ApplicationListener {
 			validActor = hit(x,y);
 			if(isValidActor(validActor))
 				currentScene.onTouchDown(validActor);
-			return true;
+			return super.touchDown(event, x, y, pointer, button);
 		}
 		
 		
@@ -1014,8 +978,8 @@ public final class Stage implements ApplicationListener {
 					currentScene.onGesture(getGestureDirection());
 				}
 			}
-			if(hasControl)
-				if(Config.useDrag) dragCam((int)x, (int)-y);
+			if(Config.useDrag) 
+				dragCam((int)x, (int)-y);
 		}
 		
 		@Override
@@ -1037,9 +1001,25 @@ public final class Stage implements ApplicationListener {
 			prevDifY = 0.0f;
 			// reset Gesture
 			currentScene.onTouchUp();
-			if(hasControl)
-				last.set(-1, -1, -1);
+			last.set(-1, -1, -1);
 			gestureStarted = false;
+		}
+		
+		@Override
+		public boolean keyTyped(InputEvent event, char key) {
+			currentScene.onKeyTyped(key);
+			return super.keyUp(event, key);
+		}
+		
+		@Override
+		public boolean keyUp(InputEvent event, int keycode) {
+			currentScene.onKeyUp(keycode);
+			return super.keyUp(event, keycode);
+		}
+		@Override
+		public boolean keyDown(InputEvent event, int keycode) {
+			currentScene.onKeyDown(keycode);
+			return super.keyDown(event, keycode);
 		}
 	};
 	
@@ -1082,6 +1062,11 @@ public final class Stage implements ApplicationListener {
 * 					Utilities Related Functions												   	       		   *
 ************************************************************************************************************/
 	
+	/*
+	 * The the angle in degrees of the inclination of a line
+	 * @param cx, cy The center point x, y
+	 * @param tx, ty The target point x, y
+	 */
 	public static float getAngle(float cx, float cy, float tx, float ty) {
 	    float angle = (float) Math.toDegrees(MathUtils.atan2(tx - cx, ty - cy));
 	    //if(angle < 0){
@@ -1090,16 +1075,15 @@ public final class Stage implements ApplicationListener {
 	    return angle;
 	}
 	
+	private static Vector2 distVector = new Vector2();
 	public static final float getDistance(Actor a, Actor b){
-		float dx = java.lang.Math.abs(a.getX() - b.getX());
-		float dy = java.lang.Math.abs(a.getY() - b.getY());
-		return (float)java.lang.Math.sqrt(dx*dx + dy*dy); 
+		distVector.set(a.getX(), a.getY());
+		return distVector.dst(b.getX(), b.getY());
 	}
 	
 	public static final float getDistance(float x1, float y1, float x2, float y2){
-		float dx = java.lang.Math.abs(x1 - x2);
-		float dy = java.lang.Math.abs(y1 - y2);
-		return (float)java.lang.Math.sqrt(dx*dx + dy*dy); 
+		distVector.set(x1, y1);
+		return distVector.dst(x2, y2);
 	}
 	
 	/*
@@ -1119,7 +1103,7 @@ public final class Stage implements ApplicationListener {
 		return text.substring(0, 1).toLowerCase()+text.substring(1);
 	}
 
-	public static Rectangle getBoundingBox(Actor actor) {
+	public static Rectangle getBounds(Actor actor) {
 		float posX = actor.getX();
 		float posY = actor.getY();
 		float width = actor.getWidth();
@@ -1128,7 +1112,7 @@ public final class Stage implements ApplicationListener {
 	}
 
 	public static boolean collides(Actor actor, float x, float y) {
-		Rectangle rectA1 = getBoundingBox(actor);
+		Rectangle rectA1 = getBounds(actor);
 		Rectangle rectA2 = new Rectangle(x, y, 5, 5);
 		// Check if rectangles collides
 		if (Intersector.overlaps(rectA1, rectA2)) {
@@ -1139,8 +1123,8 @@ public final class Stage implements ApplicationListener {
 	}
 
 	public static boolean collides(Actor actor1, Actor actor2) {
-		Rectangle rectA1 = getBoundingBox(actor1);
-		Rectangle rectA2 = getBoundingBox(actor2);
+		Rectangle rectA1 = getBounds(actor1);
+		Rectangle rectA2 = getBounds(actor2);
 		// Check if rectangles collides
 		if (Intersector.overlaps(rectA1, rectA2)) {
 			return true;
@@ -1152,18 +1136,18 @@ public final class Stage implements ApplicationListener {
 	/*
 	 * TEA Encryption and Decryption
 	 */
-	public static String teaKey = "Default";
-	private static final int delta = 0x9E3779B9;
+	public static String encryptKey = "Default";
+	private static final int encryptDelta = 0x9E3779B9;
 	private static final int MX(int sum, int y, int z, int p, int e, int[] k) {
 		return (z >>> 5 ^ y << 2) + (y >>> 3 ^ z << 4) ^ (sum ^ y) + (k[p & 3 ^ e] ^ z);
 	}
 	
 	public static final byte[] encrypt(String data) {
-		return encrypt(data.getBytes(), teaKey.getBytes());
+		return encrypt(data.getBytes(), encryptKey.getBytes());
 	}
 
 	public static final byte[] decrypt(String data) {
-		return decrypt(data.getBytes(), teaKey.getBytes());
+		return decrypt(data.getBytes(), encryptKey.getBytes());
 	}
 
 	public static final byte[] encrypt(String data, String key) {
@@ -1202,7 +1186,7 @@ public final class Stage implements ApplicationListener {
 		int p, q = 6 + 52 / (n + 1);
 
 		while (q-- > 0) {
-			sum = sum + delta;
+			sum = sum + encryptDelta;
 			e = sum >>> 2 & 3;
 	for (p = 0; p < n; p++) {
 		y = v[p + 1];
@@ -1229,7 +1213,7 @@ public final class Stage implements ApplicationListener {
 		int z = v[n], y = v[0], sum, e;
 		int p, q = 6 + 52 / (n + 1);
 
-		sum = q * delta;
+		sum = q * encryptDelta;
 		while (sum != 0) {
 			e = sum >>> 2 & 3;
 		for (p = n; p > 0; p--) {
@@ -1238,7 +1222,7 @@ public final class Stage implements ApplicationListener {
 		}
 		z = v[n];
 		y = v[0] -= MX(sum, y, z, p, e, k);
-		sum = sum - delta;
+		sum = sum - encryptDelta;
 		}
 		return v;
 	}

@@ -7,7 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import java.util.Random;
 
 /** 
- *  A Basic TicTacToe Game Scene
+ *  A Basic TicTacToe Game
+ Scene
  *  
  * @author pyros2097 */
 public class TicTacToe extends Scene {
@@ -144,6 +145,18 @@ public class TicTacToe extends Scene {
 
     @Override
     public void onGesture(GestureType type){}
+
+    @Override
+    public void onKeyTyped(char key){
+    }
+    
+    @Override
+    public void onKeyUp(int keycode){
+    }
+    
+    @Override
+    public void onKeyDown(int keycode){
+    }
 
     @Override
     public void onPause(){

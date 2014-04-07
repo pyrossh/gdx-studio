@@ -8,6 +8,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.swing.AbstractListModel;
+import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -19,7 +20,7 @@ import javax.swing.event.ListSelectionListener;
 import web.laf.lite.layout.VerticalFlowLayout;
 import web.laf.lite.utils.UIUtils;
 
-public abstract class BaseList extends JPanel  implements ListSelectionListener, ActionListener {
+public abstract class BaseList extends JPanel implements ListSelectionListener, ActionListener {
 	private static final long serialVersionUID = 1L;
 	protected JList<String> list;
 	protected DefaultListModel<String> listModel;
@@ -35,12 +36,14 @@ public abstract class BaseList extends JPanel  implements ListSelectionListener,
 		list = new JList<String>(listModel);
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		list.addListSelectionListener(this);
+		UIUtils.setDecorateSelection(list, false);
 		header = new Style.TitleLabel(title);
 		add(header);
 		scrollPane = new JScrollPane(list);
 		scrollPane.setPreferredSize(new Dimension(200, 175));
 		UIUtils.setDrawBorder(scrollPane, false);
 		add(scrollPane);
+		setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Style.border));
 	}
 	
 	BaseList(String title, boolean dontAddScroll){
@@ -56,6 +59,7 @@ public abstract class BaseList extends JPanel  implements ListSelectionListener,
 		scrollPane = new JScrollPane(list);
 		scrollPane.setPreferredSize(new Dimension(200, 175));
 		UIUtils.setDrawBorder(scrollPane, false);
+		setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Style.border));
 	}
 	
 	BaseList(String title, String... items){
@@ -72,6 +76,7 @@ public abstract class BaseList extends JPanel  implements ListSelectionListener,
 		scrollPane.setPreferredSize(new Dimension(200, 175));
 		UIUtils.setDrawBorder(scrollPane, false);
 		add(scrollPane);
+		setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Style.border));
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -88,6 +93,7 @@ public abstract class BaseList extends JPanel  implements ListSelectionListener,
 		scrollPane = new JScrollPane(list);
 		scrollPane.setPreferredSize(new Dimension(200, 175));
 		UIUtils.setDrawBorder(scrollPane, false);
+		setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Style.border));
 	}
 	
 	public void enable(){

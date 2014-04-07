@@ -1,7 +1,12 @@
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JPanel;
 import javax.swing.event.ListSelectionEvent;
+
+import web.laf.lite.widget.CenterPanel;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
@@ -11,13 +16,21 @@ public class ActorPanel extends BaseList {
 	String[] btns = new String[]{
 			"Cut", "cut", "Copy", "copy", "Paste", "paste", "Delete", "trash"
 	};
+	private JComboBox<String> groupCombo = BaseTable.createComboBox();
 	
 	public static Actor copiedActor = null;
+	public static Actor cutActor = null;
 	
 	public ActorPanel(){
 		super("Actors", "");
-		add(Style.createButtonToolBar(this, btns));
+		JPanel tools = Style.createButtonToolBar(this, btns);
+		groupCombo.addItem("Root");
+		groupCombo.setPreferredSize(new Dimension(90, 17));
+		tools.add(new CenterPanel(groupCombo, false, true));
+		add(tools);
 		add(scrollPane);
+		if(Content.sceneFileExists())
+			setHeaderText(Content.getSceneFile());
 	}
 
 	public void addActor(String actorName){
@@ -31,6 +44,19 @@ public class ActorPanel extends BaseList {
 		listModel2.removeElement(actorName);
 		listModel2.addElement(newName);
 		unlock();
+	}
+	
+	public void addGroup(String groupName){
+		groupCombo.addItem(groupName);
+	}
+	
+	public void removeGroup(String groupName){
+		// must check for root
+		for(int i=0;i<groupCombo.getItemCount();i++)
+			if(groupCombo.getItemAt(i).equals(groupCombo.getSelectedItem())){
+				groupCombo.removeItem(groupName);
+				break;
+			}
 	}
 	
 	@Override
@@ -61,21 +87,26 @@ public class ActorPanel extends BaseList {
 		lock();
 		switch(((JButton)e.getSource()).getToolTipText()){
 		case "Cut": 
-			copiedActor = SceneEditor.selectedActor;
+			cutActor = SceneEditor.selectedActor;
+			copiedActor = null;
 			listModel2.removeElement(SceneEditor.selectedActor.getName());
 			Stage.removeActor(SceneEditor.selectedActor);
 			break;
 			
 		case "Copy":
-			//need to make new copy
-			//copiedActor = selectedActor;
+			String line = Stage.json.toJson(SceneEditor.selectedActor);
+			copiedActor = Stage.json.fromJson(Actor.class, line);
+			cutActor = null;
 			break;
 			
 		case "Paste":
+			if(cutActor != null){
+				Content.studioPanel.setName(cutActor);
+				cutActor = null;
+			}
 			if(copiedActor != null){
-				copiedActor.setName(copiedActor.getName()+"1");
-				Stage.addActor(copiedActor, Stage.mouse.x, Stage.mouse.y);
-				addActor(copiedActor.getName());
+				copiedActor = Stage.json.fromJson(Actor.class, Stage.json.toJson(SceneEditor.selectedActor));
+				Content.studioPanel.setName(copiedActor);
 			}
 			break;
 		
@@ -86,5 +117,9 @@ public class ActorPanel extends BaseList {
 			break;
 		}
 		unlock();
+	}
+	
+	public void setHeaderText(String text){
+		header.setText(text);
 	}
 }

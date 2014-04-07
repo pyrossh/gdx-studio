@@ -14,6 +14,7 @@ import web.laf.lite.utils.UIUtils;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -29,16 +30,22 @@ public class PropertyPanel extends BaseTable {
 	JComboBox<String> texcombo = createComboBox();
 	
 	static int rowCount = 0;
+	static int noOfRows = 16;
 	
 	public PropertyPanel(){
 		super("Properties", null, new PropertyRenderer());
-		editors.add(createTextFieldEditor());
+		editors.add(createTextFieldEditor()); //Name
 		editors.add(createIntegerSpinner("X"));
 		editors.add(createIntegerSpinner("Y"));
 		editors.add(createIntegerSpinner("Width"));
 		editors.add(createIntegerSpinner("Height"));
+		editors.add(createIntegerSpinner("OriginX"));
+		editors.add(createIntegerSpinner("OriginY"));
+		editors.add(createIntegerSpinner("Rotation"));
 		editors.add(createIntegerSpinner("Z-Index"));
 		editors.add(new ColorEditor());
+		editors.add(createTouchableEditor()); //Touchable
+		editors.add(createBooleanEditor()); //Visible
 		editors.add(createTextFieldEditor());
 		editors.add(createTextFieldEditor());
 		editors.add(createTextFieldEditor());
@@ -58,7 +65,7 @@ public class PropertyPanel extends BaseTable {
 	
 	@Override
 	public void clear(String... names){
-		super.clear("Name", "X", "Y", "Width", "Height", "Z-Index", "Color", "", "", "", "");
+		super.clear("Name", "X", "Y", "Width", "Height",  "OriginX", "OriginY", "Rotation", "Z-Index", "Color", "Touchable", "Visible", "", "", "", "");
 	}
 	
 	@Override
@@ -66,12 +73,17 @@ public class PropertyPanel extends BaseTable {
 		rowCount = 0;
 		super.update("Name", ""+SceneEditor.selectedActor.getName(), "X", ""+(int)SceneEditor.selectedActor.getX(), 
 				"Y", ""+(int)SceneEditor.selectedActor.getY(), "Width", ""+(int)SceneEditor.selectedActor.getWidth(),
-				"Height", ""+(int)SceneEditor.selectedActor.getHeight(),"Z-Index", ""+(int)SceneEditor.selectedActor.getZIndex(),
-				"Color", ""+SceneEditor.selectedActor.getColor().toString());
-		editors.set(7, createTextFieldEditor());
-		editors.set(8, createTextFieldEditor());
-		editors.set(9, createTextFieldEditor());
-		editors.set(10, createTextFieldEditor());
+				"Height", ""+(int)SceneEditor.selectedActor.getHeight(), "OriginX",""+(int)SceneEditor.selectedActor.getOriginX(),
+				"OriginY",""+(int)SceneEditor.selectedActor.getOriginY(),"Rotation",""+(int)SceneEditor.selectedActor.getRotation(),
+				"Z-Index", ""+(int)SceneEditor.selectedActor.getZIndex(),
+				"Color", ""+SceneEditor.selectedActor.getColor().toString(),
+				"Touchable", ""+SceneEditor.selectedActor.getTouchable().toString(),
+				"Visible", ""+SceneEditor.selectedActor.isVisible()
+		);
+		editors.set(12, createTextFieldEditor());
+		editors.set(13, createTextFieldEditor());
+		editors.set(14, createTextFieldEditor());
+		editors.set(15, createTextFieldEditor());
 		
 		/* From here it varies for each type */
 		if(SceneEditor.selectedActor instanceof ImageJson){
@@ -79,7 +91,7 @@ public class PropertyPanel extends BaseTable {
 			texcombo.removeAllItems();
 			for(String tex: Asset.texMap.keys())
 				texcombo.addItem(tex);
-			editors.set(7, new DefaultCellEditor(texcombo));
+			editors.set(12, new DefaultCellEditor(texcombo));
 		}
 		
 		/* FONTS */
@@ -89,7 +101,7 @@ public class PropertyPanel extends BaseTable {
 			fontcombo.removeAllItems();
 			for(String font: Asset.fontMap.keys())
 				fontcombo.addItem(font);
-			editors.set(7, new DefaultCellEditor(fontcombo));
+			editors.set(12, new DefaultCellEditor(fontcombo));
 		}
 		
 		if(SceneEditor.selectedActor instanceof TextButton){
@@ -105,9 +117,9 @@ public class PropertyPanel extends BaseTable {
 			addRow("Text", ""+((CheckBox)SceneEditor.selectedActor).getText());
 
 		if(SceneEditor.selectedActor instanceof Dialog){
-			editors.set(7, createBooleanEditor());
-			editors.set(8, createBooleanEditor());
-			editors.set(9, createBooleanEditor());
+			editors.set(12, createBooleanEditor());
+			editors.set(13, createBooleanEditor());
+			editors.set(14, createBooleanEditor());
 			addRow("Modal", ""+((Dialog)SceneEditor.selectedActor).isModal()); //7
 			addRow("Moveble", ""+((Dialog)SceneEditor.selectedActor).isMovable()); //8
 			addRow("Resizable", ""+((Dialog)SceneEditor.selectedActor).isResizable()); //9
@@ -128,15 +140,15 @@ public class PropertyPanel extends BaseTable {
 		}
 		if(SceneEditor.selectedActor instanceof Sprite){
 			Sprite sprite = ((Sprite)SceneEditor.selectedActor);
-			editors.set(7, createBooleanEditor());
-			editors.set(8, createBooleanEditor());
+			editors.set(12, createBooleanEditor());
+			editors.set(13, createBooleanEditor());
 			addRow("Active", ""+sprite.isAnimationActive);
 			addRow("Looping", ""+sprite.isAnimationLooping);
 			addRow("Duration", ""+sprite.getDuration());
 			addRow("Textures", ""+sprite.toString());
 		}
 		int value = getRowCount();
-		for(int i=0;i<11-value;i++)	
+		for(int i=0;i<noOfRows-value;i++)	
 			addRow("", "");
 	}
 	
@@ -162,13 +174,25 @@ public class PropertyPanel extends BaseTable {
 			case "Y": SceneEditor.selectedActor.setY(Float.parseFloat(value));break;
 			case "Width": SceneEditor.selectedActor.setWidth(Float.parseFloat(value));break;
 			case "Height": SceneEditor.selectedActor.setHeight(Float.parseFloat(value));break;
+			case "OriginX": SceneEditor.selectedActor.setOriginX(Float.parseFloat(value));break;
+			case "OriginY": SceneEditor.selectedActor.setOriginY(Float.parseFloat(value));break;
+			case "Rotation": SceneEditor.selectedActor.setRotation(Float.parseFloat(value));break;
 			case "Z-Index": 
 				int z = Integer.parseInt(value);
-				//if(z<0)
-				//	updateProperty("Z-Index", ""+SceneEditor.selectedActor.getZIndex(), 0);
-				//else	
+				if(!(z<0) && !(z>Stage.getRoot().getChildren().size))
 					SceneEditor.selectedActor.setZIndex(z);
+				else	
+					updateProperty("Z-Index", ""+SceneEditor.selectedActor.getZIndex(), 0);
 				break;
+			case "Color":
+				if(value.length() == 8 && value.matches("[0-9A-Fa-f]+"))
+					SceneEditor.selectedActor.setColor(Color.valueOf(value));
+			break;
+			case "Touchable":SceneEditor.selectedActor.setTouchable(Touchable.valueOf(value));break;
+			case "Visible":SceneEditor.selectedActor.setVisible(Boolean.parseBoolean(value));break;
+			
+				
+				
 			case "Text": 
 				if(SceneEditor.selectedActor instanceof Label){
 					((Label)SceneEditor.selectedActor).setText(value);
@@ -188,11 +212,6 @@ public class PropertyPanel extends BaseTable {
 					((Dialog)SceneEditor.selectedActor).setTitle(value);
 					((Dialog)SceneEditor.selectedActor).pack();
 				}
-				break;
-				
-			case "Color":
-					if(value.length() == 8 && value.matches("[0-9A-Fa-f]+"))
-						SceneEditor.selectedActor.setColor(Color.valueOf(value));
 				break;
 				
 			// TextField Related Properties
@@ -261,6 +280,7 @@ public class PropertyPanel extends BaseTable {
 				break;
 		}
 		SceneEditor.isDirty = true;
+		Stage.outline(SceneEditor.selectedActor);
 		Frame.dashPanel.update();
 	}
 	
@@ -273,7 +293,7 @@ public class PropertyPanel extends BaseTable {
 				case "Y": super.updateProperty(key, value, 2);break;
 				case "Width": super.updateProperty(key, value, 3);break;
 				case "Height": super.updateProperty(key, value, 4);break;
-				case "Z-Index": super.updateProperty(key, value, 5);break;
+				case "Z-Index": super.updateProperty(key, value, 8);break;
 			}
 		}
 	}
@@ -290,18 +310,23 @@ class PropertyRenderer extends BaseRenderer {
     	    checkBox.setHorizontalAlignment(JLabel.CENTER);
     	    return checkBox;
     	}*/
+		//try {
+	        Boolean.parseBoolean(value.toString());
+	   // } catch ( java.text.ParseException e ) {
+	  //  	e.printStackTrace();
+	  //  }
         setBorder(noFocusBorder);
         if(column == 0)
         	return new HeaderLabel(value.toString());
         else {
-        	if(row >= 1 && row <=5){
+        	if(row >= 1 && row <=8){
         		if(!value.toString().isEmpty())
-        			spinnerInteger.setValue((Integer)Integer.parseInt(value.toString()));
+        			spinnerInteger.setValue((int)Float.parseFloat(value.toString()));
         		else
         			spinnerInteger.setValue(new Integer(0));
         		return spinnerInteger;
             }
-        	if(row == 6){
+        	if(row == 9){
         		label.setOpaque(true);
         		label.setBorder(BorderFactory.createLineBorder(java.awt.Color.gray));
         		String colorString = (String) value;

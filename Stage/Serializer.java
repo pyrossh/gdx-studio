@@ -1,6 +1,7 @@
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
@@ -16,37 +17,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.ui.Tree;
+import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 
 public class Serializer {
-
-	public static void deserialize(String className, String value){
-		if(className.equals("SceneJson")){
-			JsonValue jv = Stage.jsonReader.parse(value);
-			Scene.sceneBackground = jv.getString("background");
-			Scene.sceneMusic = jv.getString("music");
-			Scene.sceneTransition = jv.getString("transition");
-			Scene.sceneDuration = jv.getFloat("duration");
-			Scene.sceneInterpolationType = InterpolationType.valueOf(jv.getString("interpolation"));
-			if(!Scene.sceneBackground.equals("None"))
-				Stage.setBackground(Scene.sceneBackground);
-			if(!Scene.sceneMusic.equals("None"))
-				Asset.musicPlay(Scene.sceneMusic);
-			Effect.transition(TransitionType.valueOf(Scene.sceneTransition), 
-					Stage.getRoot(),Scene.sceneDuration, Scene.sceneInterpolationType);
-		}
-		else{
-			try {
-				Class cc = Class.forName(className);
-				Stage.addActor((Actor)Stage.json.fromJson(cc, value));
-			}
-			catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			}
-		}
-	}
 
 	public static void registerSerializer(Class clazz, Json.Serializer serializer){
 		Stage.json.setSerializer(clazz, serializer);
@@ -54,6 +32,7 @@ public class Serializer {
 
 	public static void initialize(){
 		registerSerializer(Actor.class, new ActorSerializer());
+		registerSerializer(Scene.class, new SceneSerializer());
 		registerSerializer(ImageJson.class, new ImageJson());
 		registerSerializer(Label.class, new LabelSerializer());
 		registerSerializer(Button.class, new ButtonSerializer());
@@ -64,9 +43,18 @@ public class Serializer {
 		registerSerializer(List.class, new ListSerializer());
 		registerSerializer(Slider.class, new SliderSerializer());
 		registerSerializer(TextField.class, new TextFieldSerializer());
-		registerSerializer(Dialog.class, new DialogSerializer());
 		registerSerializer(Touchpad.class, new TouchpadSerializer());
 		registerSerializer(Sprite.class, new SpriteSerializer());
+		
+		registerSerializer(Dialog.class, new DialogSerializer());
+		registerSerializer(SplitPane.class, new SplitPaneSerializer());
+		registerSerializer(ScrollPane.class, new ScrollPaneSerializer());
+		registerSerializer(Stack.class, new StackSerializer());
+		registerSerializer(Tree.class, new TreeSerializer());
+		registerSerializer(Table.class, new TableSerializer());
+		registerSerializer(ButtonGroup.class, new ButtonGroupSerializer());
+		registerSerializer(HorizontalGroup.class, new HorizontalGroupSerializer());
+		registerSerializer(VerticalGroup.class, new VerticalGroupSerializer());
 	}
 
 	public static class ActorSerializer implements Json.Serializer<Actor> {
@@ -91,7 +79,13 @@ public class Serializer {
 			actor.setY(jv.getFloat("y"));
 			actor.setWidth(jv.getFloat("width"));
 			actor.setHeight(jv.getFloat("height"));
+			actor.setOriginX(jv.getFloat("ox"));
+			actor.setOriginY(jv.getFloat("oy"));
+			actor.setRotation(jv.getFloat("rotation"));
+			//actor.setZIndex(jv.getInt("zindex"));
 			actor.setColor(Color.valueOf(jv.getString("color")));
+			actor.setTouchable(Touchable.valueOf(jv.getString("touchable")));
+			actor.setVisible(jv.getBoolean("visible"));
 		}
 
 		public static void writeActor(Json json, Actor actor){
@@ -101,32 +95,44 @@ public class Serializer {
 			json.writeValue("y", actor.getY());
 			json.writeValue("width", actor.getWidth());
 			json.writeValue("height", actor.getHeight());
-			json.writeValue("color", actor.getColor().toString());
 			json.writeValue("ox", actor.getOriginX());
 			json.writeValue("oy", actor.getOriginY());
 			json.writeValue("rotation", actor.getRotation());
+			json.writeValue("zindex", actor.getZIndex());
+			json.writeValue("color", actor.getColor().toString());
+			json.writeValue("touchable", actor.getTouchable().toString());
+			json.writeValue("visible", actor.isVisible());
 		}
 
 	}
-
-	public static class GroupSerializer extends ActorSerializer {
-
+	
+	public static class SceneSerializer extends ActorSerializer {
 		@Override
 		public Actor read(Json json, JsonValue jv, Class arg2) {
-			Group group = new Group();
-			readActor(jv, group);
-			return group;
+			Scene scene = Stage.getScene();
+			scene.sceneBackground = jv.getString("background");
+			scene.sceneMusic = jv.getString("music");
+			scene.sceneTransition = jv.getString("transition");
+			scene.sceneDuration = jv.getFloat("duration");
+			scene.sceneInterpolationType = InterpolationType.valueOf(jv.getString("interpolation"));
+			return scene;
 		}
 
 		@Override
-		public void write(Json json, Actor actor, Class arg2) {
+		public void write(Json json, Actor label, Class arg2) {
 			json.writeObjectStart();
-			writeActor(json, actor);
+			Scene scene = (Scene) label;
+			json.writeValue("class", "Scene");
+			json.writeValue("background", scene.sceneBackground);
+			json.writeValue("music", scene.sceneMusic);
+			json.writeValue("transition", scene.sceneTransition);
+			json.writeValue("duration", scene.sceneDuration);
+			json.writeValue("interpolation", scene.sceneInterpolationType.toString());
 			json.writeObjectEnd();
 		}
 	}
 
-	private static class LabelSerializer extends ActorSerializer {
+	public static class LabelSerializer extends ActorSerializer {
 
 		@Override
 		public Actor read(Json json, JsonValue jv, Class arg2) {
@@ -251,31 +257,6 @@ public class Serializer {
 
 	}
 
-	private static class DialogSerializer extends ActorSerializer {
-
-		@Override
-		public Actor read(Json json, JsonValue jv, Class arg2) {
-			Dialog dialog = new Dialog(jv.getString("title"), Asset.skin);
-			readActor(jv, dialog);
-			dialog.setModal(jv.getBoolean("modal"));
-			dialog.setMovable(jv.getBoolean("move"));
-			dialog.setResizable(jv.getBoolean("resize"));
-			return dialog;
-		}
-
-		@Override
-		public void write(Json json, Actor dialog, Class arg2) {
-			json.writeObjectStart();
-			writeActor(json, dialog);
-			json.writeValue("title", ((Dialog)dialog).getTitle());
-			json.writeValue("modal", ((Dialog)dialog).isModal());
-			json.writeValue("move", ((Dialog)dialog).isMovable());
-			json.writeValue("resize", ((Dialog)dialog).isResizable());
-			json.writeObjectEnd();
-		}
-
-	}
-
 	public static class TouchpadSerializer extends ActorSerializer {
 		public static float deadZoneRadius = 5f;
 		@Override
@@ -330,92 +311,8 @@ public class Serializer {
 			json.writeObjectEnd();
 		}
 	}
-
-	private static class SplitPaneSerializer extends ActorSerializer {
-
-		@Override
-		public Actor read(Json json, JsonValue jv, Class arg2) {
-			SplitPane label = new SplitPane(null, null, false, Asset.skin);
-			readActor(jv, label);
-			return label;
-		}
-
-		@Override
-		public void write(Json json, Actor label, Class arg2) {
-			json.writeObjectStart();
-			writeActor(json, label);
-			json.writeObjectEnd();
-		}
-	}
-
-	private static class ScrollPaneSerializer extends ActorSerializer {
-
-		@Override
-		public Actor read(Json json, JsonValue jv, Class arg2) {
-			ScrollPane label = new ScrollPane(null);
-			readActor(jv, label);
-			return label;
-		}
-
-		@Override
-		public void write(Json json, Actor label, Class arg2) {
-			json.writeObjectStart();
-			writeActor(json, label);
-			json.writeObjectEnd();
-		}
-	}
-
-	private static class StackSerializer extends ActorSerializer {
-
-		@Override
-		public Actor read(Json json, JsonValue jv, Class arg2) {
-			Stack label = new Stack();
-			readActor(jv, label);
-			return label;
-		}
-
-		@Override
-		public void write(Json json, Actor label, Class arg2) {
-			json.writeObjectStart();
-			writeActor(json, label);
-			json.writeObjectEnd();
-		}
-	}
-
-	private static class TreeSerializer extends ActorSerializer {
-
-		@Override
-		public Actor read(Json json, JsonValue jv, Class arg2) {
-			Tree label = new Tree(Asset.skin);
-			readActor(jv, label);
-			return label;
-		}
-
-		@Override
-		public void write(Json json, Actor label, Class arg2) {
-			json.writeObjectStart();
-			ActorSerializer.writeActor(json, label);
-			json.writeObjectEnd();
-		}
-	}
-
-	private static class TableSerializer extends ActorSerializer {
-
-		@Override
-		public Actor read(Json json, JsonValue jv, Class arg2) {
-			Table table = new Table(Asset.skin);
-			readActor(jv, table);
-			return table;
-		}
-
-		@Override
-		public void write(Json json, Actor table, Class arg2) {
-			json.writeObjectStart();
-			writeActor(json, table);
-			json.writeObjectEnd();
-		}
-
-	}
+	
+	
 
 	private static class SpriteSerializer extends ActorSerializer {
 
@@ -449,5 +346,211 @@ public class Serializer {
 		}
 
 	}
+	
+	public static class GroupSerializer implements Json.Serializer<Group> {
 
+		@Override
+		public Group read(Json json, JsonValue jv, Class arg2) {
+			Group group = new Group();
+			readGroup(jv, group);
+			return group;
+		}
+
+		@Override
+		public void write(Json json, Group group, Class arg2) {
+			json.writeObjectStart();
+			writeGroup(json, group);
+			json.writeObjectEnd();
+		}
+		
+		public void writeGroup(Json json, Group group){
+			ActorSerializer.writeActor(json, group);
+			//Array<String> actorsJson = new Array<String>();
+			//for(Actor actor: group.getChildren()){
+			//	actorsJson.add(Stage.json.toJson(actor));
+			//}
+			//json.writeValue("children", actorsJson, Array.class, String.class);
+			//not working
+		}
+		
+		public void readGroup(JsonValue jv, Group group){
+			ActorSerializer.readActor(jv, group);
+			//Array<String> array = (Array<String>)Stage.json.readValue(Array.class, String.class, 
+			//		jv.get("children"));
+			//for(String actorJson: array.items){
+			//	Stage.log(actorJson);
+			//	//group.addActor(Stage.json.fromJson(actor));
+			//}
+		}
+		
+		public void iterateActors(){
+			
+		}
+	}
+	
+	private static class DialogSerializer extends ActorSerializer {
+
+		@Override
+		public Actor read(Json json, JsonValue jv, Class arg2) {
+			Dialog dialog = new Dialog(jv.getString("title"), Asset.skin);
+			readActor(jv, dialog);
+			dialog.setModal(jv.getBoolean("modal"));
+			dialog.setMovable(jv.getBoolean("move"));
+			dialog.setResizable(jv.getBoolean("resize"));
+			return dialog;
+		}
+
+		@Override
+		public void write(Json json,  Actor dialog, Class arg2) {
+			json.writeObjectStart();
+			writeActor(json, dialog);
+			json.writeValue("title", ((Dialog)dialog).getTitle());
+			json.writeValue("modal", ((Dialog)dialog).isModal());
+			json.writeValue("move", ((Dialog)dialog).isMovable());
+			json.writeValue("resize", ((Dialog)dialog).isResizable());
+			json.writeObjectEnd();
+		}
+
+	}
+
+	private static class SplitPaneSerializer extends GroupSerializer {
+
+		@Override
+		public Group read(Json json, JsonValue jv, Class arg2) {
+			SplitPane label = new SplitPane(null, null, false, Asset.skin);
+			readGroup(jv, label);
+			return label;
+		}
+
+		@Override
+		public void write(Json json, Group label, Class arg2) {
+			json.writeObjectStart();
+			writeGroup(json, label);
+			json.writeObjectEnd();
+		}
+	}
+
+	private static class ScrollPaneSerializer extends GroupSerializer {
+
+		@Override
+		public Group read(Json json, JsonValue jv, Class arg2) {
+			ScrollPane label = new ScrollPane(null);
+			readGroup(jv, label);
+			return label;
+		}
+
+		@Override
+		public void write(Json json, Group label, Class arg2) {
+			json.writeObjectStart();
+			writeGroup(json, label);
+			json.writeObjectEnd();
+		}
+	}
+
+	private static class StackSerializer extends GroupSerializer {
+
+		@Override
+		public Group read(Json json, JsonValue jv, Class arg2) {
+			Stack label = new Stack();
+			readGroup(jv, label);
+			return label;
+		}
+
+		@Override
+		public void write(Json json, Group label, Class arg2) {
+			json.writeObjectStart();
+			writeGroup(json, label);
+			json.writeObjectEnd();
+		}
+	}
+
+	private static class TreeSerializer extends GroupSerializer {
+
+		@Override
+		public Group read(Json json, JsonValue jv, Class arg2) {
+			Tree label = new Tree(Asset.skin);
+			readGroup(jv, label);
+			return label;
+		}
+
+		@Override
+		public void write(Json json, Group label, Class arg2) {
+			json.writeObjectStart();
+			writeGroup(json, label);
+			json.writeObjectEnd();
+		}
+	}
+
+	private static class TableSerializer extends GroupSerializer {
+
+		@Override
+		public Group read(Json json, JsonValue jv, Class arg2) {
+			Table table = new Table(Asset.skin);
+			//table.getPadBottom()
+			//table.getCell(null).get
+			readGroup(jv, table);
+			return table;
+		}
+
+		@Override
+		public void write(Json json, Group table, Class arg2) {
+			json.writeObjectStart();
+			writeGroup(json, table);
+			json.writeObjectEnd();
+		}
+
+	}
+	
+	private static class ButtonGroupSerializer extends GroupSerializer {
+
+		@Override
+		public Group read(Json json, JsonValue jv, Class arg2) {
+			Table table = new Table(Asset.skin);
+			readGroup(jv, table);
+			return table;
+		}
+
+		@Override
+		public void write(Json json, Group table, Class arg2) {
+			json.writeObjectStart();
+			writeGroup(json, table);
+			json.writeObjectEnd();
+		}
+
+	}
+	
+	private static class HorizontalGroupSerializer extends GroupSerializer {
+
+		@Override
+		public Group read(Json json, JsonValue jv, Class arg2) {
+			HorizontalGroup hg = new HorizontalGroup();
+			readGroup(jv, hg);
+			return hg;
+		}
+
+		@Override
+		public void write(Json json, Group table, Class arg2) {
+			json.writeObjectStart();
+			writeGroup(json, table);
+			json.writeObjectEnd();
+		}
+
+	}
+	
+	private static class VerticalGroupSerializer extends GroupSerializer {
+
+		@Override
+		public Group read(Json json, JsonValue jv, Class arg2) {
+			VerticalGroup vg = new VerticalGroup();
+			readGroup(jv, vg);
+			return vg;
+		}
+
+		@Override
+		public void write(Json json, Group vg, Class arg2) {
+			json.writeObjectStart();
+			writeGroup(json, vg);
+			json.writeObjectEnd();
+		}
+	}
 }

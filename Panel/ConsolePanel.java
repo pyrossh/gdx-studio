@@ -19,6 +19,7 @@ import javax.swing.SwingUtilities;
 
 
 
+
 import web.laf.lite.layout.VerticalFlowLayout;
 import web.laf.lite.utils.UIUtils;
 
@@ -42,7 +43,7 @@ public class ConsolePanel extends JPanel implements ActionListener {
 		UIUtils.setMargin(this, new Insets(0,0,0,0));
 	    UIUtils.setUndecorated(this, true);
         consoleAreaPane.setPreferredSize(new Dimension(500, 250));
-		add(Style.createHeaderButton("Console", this));
+		add(new Style.TitleButton("Console", this));
 		setVisible(false);
         add(consoleAreaPane);
         if(Content.projectExists())

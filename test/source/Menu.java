@@ -44,6 +44,18 @@ public class Menu extends Scene {
             Stage.log("Down");
     }
 
+    @Override
+    public void onKeyTyped(char key){
+    }
+    
+    @Override
+    public void onKeyUp(int keycode){
+    }
+    
+    @Override
+    public void onKeyDown(int keycode){
+    }
+
      @Override
     public void onPause(){
     }

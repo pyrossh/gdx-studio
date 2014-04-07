@@ -1,6 +1,5 @@
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Graphics;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
@@ -11,6 +10,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 
 import web.laf.lite.layout.VerticalFlowLayout;
+import web.laf.lite.utils.UIUtils;
 
 final public class Frame extends JFrame implements WindowListener{
 	private static final long serialVersionUID = 1L;
@@ -39,6 +39,7 @@ final public class Frame extends JFrame implements WindowListener{
     private Frame() {
        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
        addWindowListener(this);
+       //styleProject();
     }
     
     public static Frame getInstance(){
@@ -50,18 +51,11 @@ final public class Frame extends JFrame implements WindowListener{
     public void initToolBar(){
     	toolBar = new ToolBar();
     	add(toolBar, BorderLayout.NORTH);
-    	styleProject();
     }
     
     public void initSideBar(){
-   	 	rightSideBar = new JPanel(new VerticalFlowLayout(0, 10)){
-			private static final long serialVersionUID = 1L;
-			@Override
-	   		public void paintComponent(Graphics g){
-	   			Style.drawVerticalBar(g, getWidth(), getHeight());
-	   		}
-   	 	};
-   	 	
+   	 	rightSideBar = new JPanel(new VerticalFlowLayout(0, 10));
+   	 	UIUtils.setUndecorated(rightSideBar, true);
    	 	dashPanel = new DashPanel();
    	 	widgetPanel = new WidgetPanel();
    	 	propertyPanel = new PropertyPanel();
@@ -74,14 +68,8 @@ final public class Frame extends JFrame implements WindowListener{
    	 	rightSideBar.add(eventPanel);
    	 	rightSideBar.add(widgetPanel);
    	 	
-   	 	leftSideBar = new JPanel(new VerticalFlowLayout(0, 10)){
-   	 	private static final long serialVersionUID = 1L;
-	   	 	@Override
-	   		public void paintComponent(Graphics g){
-	   			Style.drawVerticalBar(g, getWidth(), getHeight());
-	   		}
-   	 	};
-   	 	
+   	 	leftSideBar = new JPanel(new VerticalFlowLayout(0, 10));
+   	 	UIUtils.setUndecorated(leftSideBar, true);
    	 	projectPanel = new ProjectPanel();
    	 	projectSettingsPanel = new ProjectSettingsPanel();
    	 	projectSettingsPanel.setVisible(false);
@@ -197,6 +185,7 @@ final public class Frame extends JFrame implements WindowListener{
     		btn.setForeground(Style.font);
     		btn.setBackground(Style.topColor);
     	}
+    	toolBar.searchBar.setBackground(Style.listBg);
     }
     
     private static void stylePanel(JPanel panel){
@@ -204,17 +193,17 @@ final public class Frame extends JFrame implements WindowListener{
     	panel.setBackground(Style.botColor);
     	for(Component c: panel.getComponents()){
     		c.setForeground(Style.font);
-    		c.setBackground(Style.topColor);
+    		c.setBackground(Style.botColor);
     		if(c instanceof BaseList){
     			((BaseList)c).list.setBackground(Style.listBg);
     			((BaseList)c).list.setForeground(Style.font);
-    			((BaseList)c).list.setSelectionBackground(Style.border);
+    			((BaseList)c).list.setSelectionBackground(Style.listSelect);
     			((BaseList)c).list.setSelectionForeground(Style.headerFg);
     		}
     		else if(c instanceof BaseTable){
     			((BaseTable)c).table.setBackground(Style.listBg);
     			((BaseTable)c).table.setForeground(Style.font);
-    			((BaseTable)c).table.setSelectionBackground(Style.font);
+    			((BaseTable)c).table.setSelectionBackground(Style.listSelect);
     			((BaseTable)c).table.setSelectionForeground(Style.headerFg);
     		}
     		else if(c instanceof Style.TitleLabel)
@@ -268,7 +257,6 @@ final public class Frame extends JFrame implements WindowListener{
 
 	@Override
 	public void windowClosing(WindowEvent arg0) {
-		ScenePanel.save();
 		Content.editor.save();
 		if(Content.studioPanel.canvas != null)
 			Stage.clear();

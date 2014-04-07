@@ -35,7 +35,6 @@ public final class Config {
     public static float volMusic;
     public static float volSound;
     
-    public static boolean usePan;
     public static boolean useDrag;
     public static boolean useKeyboard;
     
@@ -52,7 +51,7 @@ public final class Config {
        volMusic = prefs.getFloat(VOLUME_MUSIC, 1f);
        volSound = prefs.getFloat(VOLUME_SOUND, 1f);
         
-       usePan = prefs.getBoolean(PANSCROLL, true);
+       Stage.usePan = prefs.getBoolean(PANSCROLL, true);
        useDrag = prefs.getBoolean(DRAGSCROLL, true);
        useKeyboard = prefs.getBoolean(KEYBOARD, true);
         
@@ -132,7 +131,7 @@ public final class Config {
     public static void setPanScroll(boolean ue){
         prefs.putBoolean(PANSCROLL, ue);
         prefs.flush();
-        usePan = ue ;
+        Stage.usePan = ue ;
     }
  
     public static void setDragScroll(boolean ue){

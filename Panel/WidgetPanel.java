@@ -24,7 +24,7 @@ public class WidgetPanel extends BaseList implements DragSourceListener, DragGes
 		super("Widgets", "Label","Image", "Sprite", "Button","TextButton", "CheckBox", 
 				"List", "SelectBox", "Slider", "TextField",
 				"Table", "Dialog", "Touchpad", "Map");
-		scrollPane.setPreferredSize(new Dimension(200, 100));
+		scrollPane.setPreferredSize(new Dimension(200, 50));
 		dragSource.addDragSourceListener(this);
 	    dragSource.createDefaultDragGestureRecognizer(list, DnDConstants.ACTION_MOVE, this);
 	}

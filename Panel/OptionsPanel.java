@@ -1,23 +1,27 @@
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
-import javax.swing.border.TitledBorder;
+
+import com.badlogic.gdx.tools.imagepacker.TexturePacker2;
+import com.badlogic.gdx.tools.imagepacker.TexturePacker2.Settings;
 
 import web.laf.lite.layout.HorizontalFlowLayout;
 import web.laf.lite.layout.ToolbarLayout;
 import web.laf.lite.layout.VerticalFlowLayout;
 import web.laf.lite.popup.AlignPanel;
 import web.laf.lite.utils.SpringUtils;
+import web.laf.lite.utils.UIUtils;
 import web.laf.lite.widget.WebSwitch;
-
 
 public class OptionsPanel extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
@@ -26,22 +30,23 @@ public class OptionsPanel extends JPanel implements ActionListener {
 	JPanel content1 = new JPanel(new VerticalFlowLayout());
 	JPanel content2 = new JPanel(new VerticalFlowLayout());
 	
+	JPanel conten34Border = new JPanel(new VerticalFlowLayout());
 	JPanel content34 = new JPanel(new HorizontalFlowLayout());
 	JPanel content3 = new JPanel(new VerticalFlowLayout());
 	JPanel content4 = new JPanel(new VerticalFlowLayout());
+	
+	JPanel conten5Border = new JPanel(new VerticalFlowLayout());
 	JPanel content5 = new JPanel(new SpringLayout());
+	
+	JButton packButton;
 
 	public OptionsPanel(){
-		super(new VerticalFlowLayout());
-		Font font = new JLabel().getFont().deriveFont(Font.BOLD, 12);
-		content1.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black),
-				"ToolBar", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, font));
-		content2.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black),
-				"SearchBar", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, font));
-		content34.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black),
-				"Editor", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, font));
-		content5.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black),
-				"Texture Packer", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, font));
+		super(new VerticalFlowLayout(0, 10));
+		UIUtils.setUndecorated(this, true);
+		createHeader(content1, "ToolBar");
+		createHeader(content2, "SearchBar");
+		createHeader(conten34Border, "Editor");
+		createHeader(conten5Border, "Texture Packer");
         WebSwitch left = new WebSwitch(); 
         WebSwitch right = new WebSwitch();
         WebSwitch status = new WebSwitch();
@@ -119,8 +124,9 @@ public class OptionsPanel extends JPanel implements ActionListener {
         menuItem(content4,codeFold, "Code Folding");
         menuItem(content4,showWhitespaces, "Show WhiteSpace");
         content34.add(content4);
-        row1.add(content34);
         add(row1);
+        conten34Border.add(content34);
+        add(conten34Border);
         
     	createRow(content5, "Encoding Format", new JComboBox<String>(new String[]{"RGBA8888", "RGBA4444", "RGB888", "RGB565", 
     			"Alpha", "LuminanceAlpha", "Intensity"}));
@@ -152,8 +158,30 @@ public class OptionsPanel extends JPanel implements ActionListener {
     	createRow(content5, "ClampY", new JComboBox<String>());
     	
     	SpringUtils.makeCompactGrid(content5, 6, 4, 10, 0, 10, 5);
-    	add(content5);
-        
+    	conten5Border.add(content5);
+    	add(conten5Border);
+    	
+    	packButton = new JButton("Pack All Textures");
+    	packButton.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				Settings settings = new Settings();
+				settings.maxWidth = 2048;
+		        settings.maxHeight = 2048;
+		        settings.paddingX = 0;
+		        settings.paddingY = 0;
+				TexturePacker2.process(settings, Content.getProject()+File.separator+"pack",
+						Content.getProject()+"atlas/", "pack.atlas");
+				for(File f: new File(Content.getProject()+File.separator+"pack").listFiles()){
+					if(f.isDirectory()){
+						TexturePacker2.process(settings, f.getPath(), Content.getProject()+"atlas/", f.getName());
+						JOptionPane.showMessageDialog(null, "Packed Texture: "+f.getName(), "Texture Packer", 
+								JOptionPane.INFORMATION_MESSAGE);
+					}
+				}
+			}
+    	});
+        add(packButton);
        // add(menuItem(tabSlider, "Tab Size"));
       //setMarginLineColor(Color.black);
         //setMarkOccurrences(true);
@@ -206,7 +234,6 @@ public class OptionsPanel extends JPanel implements ActionListener {
 				Content.editor.setWhitespaceVisible(showWhitespaces.isSelected());
 			}
         }); 
-        setVisible(false);
 	}
 	
 	void createRow(JPanel content, String title, Component b){
@@ -221,11 +248,18 @@ public class OptionsPanel extends JPanel implements ActionListener {
 	
 	void menuItem(JPanel content, final WebSwitch sw, String text){
 		final JLabel label = new JLabel("   "+text);
+		label.setFont(label.getFont().deriveFont(Font.BOLD));
 		JPanel pan = new JPanel(new ToolbarLayout());
 		pan.setOpaque(false);
 		pan.add(label, ToolbarLayout.START);
 		pan.add(sw, ToolbarLayout.END);
 		content.add(pan);
+	}
+	
+	void createHeader(JPanel content, String title){
+		//content.setBackground(Color.white);
+		content.add(new Style.TitleLabel(title));
+		content.setBorder(BorderFactory.createLineBorder(Style.border));
 	}
 
 	@Override

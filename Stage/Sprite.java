@@ -41,7 +41,8 @@ public class Sprite extends Actor {
 		super.draw(batch, parentAlpha);
 		if (isAnimationActive && animation != null) {
 			keyFrame = animation.getKeyFrame(Stage.stateTime, isAnimationLooping);
-			batch.draw(keyFrame, getX(), getY(), getWidth(), getHeight());
+			batch.draw(keyFrame, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(),
+					getScaleX(), getScaleY(), getRotation());
 		}
 	}
 	

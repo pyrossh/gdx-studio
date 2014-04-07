@@ -13,18 +13,13 @@ import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryUsage;
 import java.text.DecimalFormat;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSeparator;
-import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 import web.laf.lite.layout.ToolbarLayout;
-import web.laf.lite.layout.VerticalFlowLayout;
-import web.laf.lite.popup.ButtonPopup;
-import web.laf.lite.popup.PopupWay;
 import web.laf.lite.utils.LafUtils;
 import web.laf.lite.utils.UIUtils;
 import web.laf.lite.utils.UpdateTimer;
@@ -81,6 +76,7 @@ final public class StatusBar extends JPanel {
          //initUpdate();
          //initNuke(); //Reduce nuke size
          add(new MemoryBar(), ToolbarLayout.END);
+         setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Style.border));
 	}
 	
 	public void addSpace(){
@@ -88,25 +84,9 @@ final public class StatusBar extends JPanel {
 	}
 	
 	public void addSeparator(){
-		add(new VBar(), ToolbarLayout.START);
-	}
-	
-	class VBar extends JComponent {
-		private static final long serialVersionUID = 1L;
-		
-		@Override
-		protected void paintComponent(Graphics g) {
-		    super.paintComponent(g);
-		    g.setColor(Style.border);
-		    g.drawLine(0, 1, 0, getHeight());
-		}
-	}
-	
-	@Override
-	protected void paintComponent(Graphics g) {
-	    //Style.drawHorizontalBar(g, getWidth (), getHeight ());
-	    super.paintComponent(g);
-	    Style.drawTopBorder(g, getWidth());
+		JLabel comp = new JLabel();
+		comp.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, Style.border));
+		add(comp, ToolbarLayout.START);
 	}
 
 	public static void updateCaret(int row, int col){
@@ -156,31 +136,25 @@ final public class StatusBar extends JPanel {
 	}
 	
 	void initZoomIn(){
-		final JButton zoomin = Style.createExplorerToolButton("ZoomIn", "szoomin", null);
-		zoomin.addActionListener(new ActionListener(){
+		add(Style.createToolPanel("ZoomIn", "szoomin", new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				Content.editor.zoomin();
 			}
-			
-		});
-		add(zoomin);
+		}));
 	}
 	
 	void initZoomOut(){
-		final JButton zoomout = Style.createExplorerToolButton("ZoomOut", "szoomout", null);
-		zoomout.addActionListener(new ActionListener(){
+		add(Style.createToolPanel("ZoomOut", "szoomout", new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				Content.editor.zoomout();
 			}
-			
-		});
-		add(zoomout);
+		}));
 	}
 	
 	void initUpdate(){
-		final JButton update = Style.createExplorerToolButton("Update", "supdate", null);
+		/*final JButton update = Style.createExplorerToolButton("Update", "supdate", null);
 		ButtonPopup menu = new ButtonPopup(update, PopupWay.upCenter);
         JPanel popupContent = new JPanel (new VerticalFlowLayout(5, 10));
         popupContent.add(UIUtils.setBoldFont(new JLabel("SkyCode v0.39")));
@@ -192,18 +166,17 @@ final public class StatusBar extends JPanel {
         popupContent.add(new JLabel("Bug Fixes"));
         popupContent.setOpaque(false);
         menu.setContent (popupContent);
-		add(update, ToolbarLayout.END);
+		add(update, ToolbarLayout.END);*/
 	}
 	
 	void initNuke(){
-		final JButton nuke = Style.createExplorerToolButton("Free Memory", "snuke", new ActionListener(){
+		add(Style.createToolPanel("Free Memory", "snuke", new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				System.gc();
 			}
-		});
-		add(nuke, ToolbarLayout.END);
-	}	
+		}));
+	}
 }
 
 class MemoryBar extends JLabel{

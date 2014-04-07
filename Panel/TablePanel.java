@@ -26,7 +26,7 @@ public class TablePanel extends JPanel implements ActionListener {
 	public TablePanel(String title){
 		super(new VerticalFlowLayout());
 		UIUtils.setUndecorated(this, false);
-		headerButton = Style.createHeaderButton(title, this);
+		headerButton = new Style.TitleButton(title, this);
 		if(!title.isEmpty()){
 			add(headerButton);
 		}

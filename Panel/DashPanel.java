@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import com.badlogic.gdx.Gdx;
+
 import web.laf.lite.layout.VerticalFlowLayout;
 import web.laf.lite.utils.UIUtils;
 
@@ -27,7 +28,7 @@ public class DashPanel extends JPanel {
 		UIUtils.setShadeWidth(this, 0);
 		UIUtils.setRound(this, 0);
 		setBackground(Color.black);
-		add(Style.createHeaderButton("DashBoard", null));
+		add(new Style.TitleButton("DashBoard", null));
 		label = new JLabel();
 		label.setBackground(Color.black);
 		label.setVerticalTextPosition(JLabel.CENTER);

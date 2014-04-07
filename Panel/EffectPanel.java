@@ -1,6 +1,8 @@
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 
+import web.laf.lite.utils.UIUtils;
+
 
 public class EffectPanel extends BaseTable {
 	private static final long serialVersionUID = 1L;
@@ -21,6 +23,7 @@ public class EffectPanel extends BaseTable {
 	
 	public EffectPanel(){
 		super("Effects");
+		UIUtils.setUndecorated(this, true);
 		editors.add(new DefaultCellEditor(effectComboBox));
 		editors.add(createNumberField());
 		editors.add(new DefaultCellEditor(durationComboBox));

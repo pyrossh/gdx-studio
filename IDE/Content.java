@@ -1,9 +1,9 @@
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.Graphics;
 import java.awt.Insets;
 import java.io.File;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -29,7 +29,6 @@ final public class Content extends JPanel {
     public static RTextScrollPane editorScroll;
     public static StudioPanel studioPanel;
     private static ReplacePanel replacePanel;
-	private static OptionsPanel optionsPanel;
 	public static AssetPanel assetPanel;
 	private static ConsolePanel consolePanel;
 	
@@ -66,9 +65,6 @@ final public class Content extends JPanel {
         JPanel north = new JPanel(new VerticalFlowLayout());
         replacePanel = new ReplacePanel();
         north.add(replacePanel);
-        //north.add(title);
-        optionsPanel = new OptionsPanel();
-        north.add(optionsPanel);
 		add(north, BorderLayout.NORTH);
         add(card, BorderLayout.CENTER);
         
@@ -79,12 +75,7 @@ final public class Content extends JPanel {
         vert.add(assetPanel);
         vert.add(consolePanel);
         add(vert, BorderLayout.SOUTH);
-	}
-	
-	@Override
-	public void paintComponent(Graphics g){
-		Style.drawRightBorder(g, getWidth(), getHeight());
-		Style.drawLeftBorder(g, getWidth(), getHeight());
+        setBorder(BorderFactory.createMatteBorder(0, 1, 0, 1, Style.border));
 	}
 	
 	private static boolean canvasChanged = true;
@@ -130,10 +121,6 @@ final public class Content extends JPanel {
 	    	default: break;
     	}
     }
-	
-	public static void toggleOptions(){
-		optionsPanel.setVisible(!optionsPanel.isVisible());
-	}
 	
 	public static void toggleReplace(){
 		replacePanel.setVisible(!replacePanel.isVisible());

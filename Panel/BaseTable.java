@@ -34,6 +34,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 
+import com.badlogic.gdx.scenes.scene2d.Touchable;
+
 import web.laf.lite.layout.ToolbarLayout;
 import web.laf.lite.layout.VerticalFlowLayout;
 import web.laf.lite.utils.UIUtils;
@@ -71,7 +73,7 @@ public abstract class BaseTable extends JPanel implements ActionListener, TableM
 	};
 	protected final JScrollPane scrollPane;
 	protected final List<TableCellEditor> editors = new ArrayList<TableCellEditor>(3);
-	public final JButton headerButton;
+	protected final JButton headerButton;
 	
 	public BaseTable(String title, DefaultTableModel model, DefaultTableCellRenderer renderer){
 		super(new VerticalFlowLayout());
@@ -93,7 +95,7 @@ public abstract class BaseTable extends JPanel implements ActionListener, TableM
 		tableModel.setColumnCount(2);
 		tableModel.addTableModelListener(this);
 		clear();
-		headerButton = Style.createHeaderButton(title, this);
+		headerButton = new Style.TitleButton(title, this);
 		if(!title.isEmpty()){
 			add(headerButton);
 		}
@@ -161,6 +163,10 @@ public abstract class BaseTable extends JPanel implements ActionListener, TableM
 		}
 	}
 	
+	
+	public void setProperty(String name, String value){
+	}
+	
 	public void updateProperty(String key, String value, int row){
 		lock();
 		tableModel.setValueAt(value, row, 1);
@@ -185,6 +191,7 @@ public abstract class BaseTable extends JPanel implements ActionListener, TableM
 		UIUtils.setShadeWidth(spinner, 0);
 		UIUtils.setRound(spinner, 0);
 		UIUtils.setDrawFocus(spinner, false);
+		spinner.setFocusable(false);
 		return spinner;
 	}
 	
@@ -195,6 +202,7 @@ public abstract class BaseTable extends JPanel implements ActionListener, TableM
 		UIUtils.setShadeWidth(spinner, 0);
 		UIUtils.setRound(spinner, 0);
 		UIUtils.setDrawFocus(spinner, false);
+		spinner.setFocusable(false);
 		return spinner;
 	}
 	
@@ -203,6 +211,7 @@ public abstract class BaseTable extends JPanel implements ActionListener, TableM
 		UIUtils.setShadeWidth(tf, 0);
 		UIUtils.setRound(tf, 0);
 		UIUtils.setDrawFocus(tf, false);
+		tf.setFocusable(false);
 		return new DefaultCellEditor(tf);
 	}
 	
@@ -211,6 +220,7 @@ public abstract class BaseTable extends JPanel implements ActionListener, TableM
 		UIUtils.setShadeWidth(tf, 0);
 		UIUtils.setRound(tf, 0);
 		UIUtils.setDrawFocus(tf, false);
+		tf.setFocusable(false);
 		return tf;
 	}
 	
@@ -219,6 +229,7 @@ public abstract class BaseTable extends JPanel implements ActionListener, TableM
 		UIUtils.setShadeWidth(tf, 0);
 		UIUtils.setRound(tf, 0);
 		UIUtils.setDrawFocus(tf, false);
+		tf.setFocusable(false);
 		return new DefaultCellEditor(tf);
 	}
 	
@@ -227,6 +238,7 @@ public abstract class BaseTable extends JPanel implements ActionListener, TableM
 		UIUtils.setShadeWidth(combo, 0);
 		UIUtils.setRound(combo, 0);
 		UIUtils.setDrawFocus(combo, false);
+		combo.setFocusable(false);
 		return combo;
 	}
 	
@@ -242,11 +254,13 @@ public abstract class BaseTable extends JPanel implements ActionListener, TableM
 		return new DefaultCellEditor(new JComboBox<String>(new String[]{"false", "true"}));
 	}
 	
-	public static TableCellEditor createCheckBoxEditor(){
-		return new CheckBoxEditor();
+	public static DefaultCellEditor createTouchableEditor(){
+		return new DefaultCellEditor(new JComboBox<String>(new String[]{Touchable.enabled.toString()
+				, Touchable.disabled.toString(), Touchable.childrenOnly.toString()}));
 	}
 	
-	public void setProperty(String name, String value){
+	public static TableCellEditor createCheckBoxEditor(){
+		return new CheckBoxEditor();
 	}
 }
 
@@ -487,7 +501,6 @@ class SpinnerIntegerEditor extends AbstractCellEditor implements TableCellEditor
     public SpinnerIntegerEditor() {
         spinner = BaseTable.createSpinnerInteger();
         spinner.setBorder(BorderFactory.createEmptyBorder());
-       // ((DefaultEditor) spinner.getEditor()).getTextField().setEnabled(false);
         ((DefaultEditor) spinner.getEditor()).getTextField().setEditable(false);
     }
 

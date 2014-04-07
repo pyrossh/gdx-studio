@@ -73,7 +73,19 @@ public class Splash extends Scene {
     @Override
     public void onGesture(GestureType type){}
 
-     @Override
+    @Override
+    public void onKeyTyped(char key){
+    }
+    
+    @Override
+    public void onKeyUp(int keycode){
+    }
+    
+    @Override
+    public void onKeyDown(int keycode){
+    }
+
+    @Override
     public void onPause(){
     }
     

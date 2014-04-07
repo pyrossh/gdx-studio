@@ -500,23 +500,43 @@ public final class Asset {
 	}
 	
 	/*
-	 * Load a model from the model directory
+	 * Load a G3db model from the model directory
 	 * @param modelName The name of the modelFile
 	 * @example loadModel("ship");
 	 */
 	public static Actor3d loadModel(String modelName){
+		assetMan.load(basePath+"model/"+modelName+".g3db", Model.class);
+		assetMan.finishLoading();
+		return new Actor3d(assetMan.get(basePath+"model/"+modelName+".g3db", Model.class));
+	}
+	
+	/*
+	 * Unload a G3db model which was previously loaded in the assetManager
+	 * @param modelName The name of the modelFile that was loaded
+	 * @example unloadModel("ship");
+	 */
+	public static void unloadModel(String modelName){
+		assetMan.unload(basePath+"model/"+modelName+".g3db");
+	}
+	
+	/*
+	 * Load a Obj model from the model directory
+	 * @param modelName The name of the modelFile
+	 * @example loadModel("ship");
+	 */
+	public static Actor3d loadModelObj(String modelName){
 		assetMan.load(basePath+"model/"+modelName+".obj", Model.class);
 		assetMan.finishLoading();
 		return new Actor3d(assetMan.get(basePath+"model/"+modelName+".obj", Model.class));
 	}
 	
 	/*
-	 * Unload a model which was previously loaded in the assetManager
+	 * Unload a Obj model which was previously loaded in the assetManager
 	 * @param modelName The name of the modelFile that was loaded
 	 * @example unloadModel("ship");
 	 */
-	public static void unloadModel(String modelName){
-		assetMan.unload(basePath+"model/"+modelName+".g3d");
+	public static void unloadModelObj(String modelName){
+		assetMan.unload(basePath+"model/"+modelName+".obj");
 	}
 	
 /***********************************************************************************************************

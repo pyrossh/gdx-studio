@@ -52,6 +52,18 @@ public class BasicDemo extends Scene {
     public void onGesture(GestureType type){}
 
     @Override
+    public void onKeyTyped(char key){
+    }
+    
+    @Override
+    public void onKeyUp(int keycode){
+    }
+    
+    @Override
+    public void onKeyDown(int keycode){
+    }
+
+    @Override
     public void onPause() {
         Stage.pauseState = true;
         pauseImage.setFillParent(true);

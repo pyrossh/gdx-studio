@@ -2,8 +2,8 @@
 title: Game1,
 version: "0.45",
 hasIcon: true,
-targetSize: "860x650",
-screenSize: "860x650",
+targetSize: "800x480",
+screenSize: "800x480",
 audioBufferCount: "10",
 resize: "false",
 forceExit: "false",
@@ -15,5 +15,5 @@ keepAspectRatio: "false",
 showFPS: "true",
 loggingEnabled: "true",
 project: "C:/CODE/RpgIDE/test/",
-target: Android
+target: Desktop
 }

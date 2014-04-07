@@ -1,15 +1,19 @@
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FileDialog;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Insets;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.lang.ProcessBuilder.Redirect;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
@@ -30,6 +34,7 @@ final public class ToolBar extends JPanel {
 	SearchBar searchBar;
 	ProcessBuilder pb;
 	Process runningProcess;
+	OptionsPanel optionsPanel;
     
 	public ToolBar(){
 		super(new ToolbarLayout());
@@ -62,12 +67,12 @@ final public class ToolBar extends JPanel {
         addSpace();
         addSeparator();
         initView();
+        setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Style.border));
 	}
 	
 	@Override
 	public void paintComponent(Graphics g){
 		Style.drawHorizontalBar(g, getWidth (), getHeight ());
-		Style.drawBottomBorder(g, getWidth (), getHeight ());
 	}
 	
 	void initSearch(){
@@ -79,29 +84,41 @@ final public class ToolBar extends JPanel {
 	}
 	
 	void initAbout(){
-		add(Style.createToolPanel("", "sabout", null));
-		UIUtils.setUndecorated(Style.btnMap.get("sabout"), true);
-        final ButtonPopup menu = new ButtonPopup(Style.btnMap.get("sabout"), PopupWay.downRight);
-        menu.setRound(0);
-        final JPanel popupContent = new JPanel (new VerticalFlowLayout(5, 10));
-        final JButton licenseBtn = new JButton("Apache License v2.0");
-        final JPanel author = new JPanel(new HorizontalFlowLayout());
-        final JPanel hoz = new JPanel(new HorizontalFlowLayout());
-        popupContent.add(UIUtils.setBoldFont(new JLabel("GdxStudio v"+Main.version)));
-        popupContent.add(new JSeparator(SwingConstants.HORIZONTAL));
-        author.setOpaque(false);
-        author.add(new JLabel("Created by: pyros2097"));
-        author.add(licenseBtn);
-        popupContent.add(author);
-        popupContent.add(new JSeparator(SwingConstants.HORIZONTAL));
-        popupContent.add(new JLabel("", Icon.icon("slibGDX"), JLabel.LEADING));
-        popupContent.add(new JLabel("", Icon.icon("sweblaf"), JLabel.LEADING));
-        hoz.setOpaque(false);
-        hoz.add(new JLabel("", Icon.icon("shierologo"), JLabel.LEADING));
-        hoz.add(new JLabel("", Icon.icon("stexturepacker"), JLabel.LEADING));
-        popupContent.add(hoz);
-        popupContent.setOpaque(false);
-        menu.setContent (popupContent);
+		add(Style.createToolPanel("", "sabout", new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				JDialog dialog = new JDialog(Frame.getInstance(), "About", false);
+				dialog.setResizable(false);
+				dialog.getContentPane().setLayout(new BorderLayout());
+				final JPanel popupContent = new JPanel (new VerticalFlowLayout(5, 10));
+				final JButton licenseBtn = new JButton("Apache License v2.0");
+				final JPanel author = new JPanel(new HorizontalFlowLayout());
+				final JPanel hoz = new JPanel(new HorizontalFlowLayout());
+				popupContent.add(UIUtils.setBoldFont(new JLabel("GdxStudio v"+Main.version)));
+				popupContent.add(new JSeparator(SwingConstants.HORIZONTAL));
+				author.setOpaque(false);
+				author.add(new JLabel("Created by: pyros2097"));
+				author.add(licenseBtn);
+				popupContent.add(author);
+				popupContent.add(new JSeparator(SwingConstants.HORIZONTAL));
+				popupContent.add(new JLabel("", Icon.icon("slibGDX"), JLabel.LEADING));
+				popupContent.add(new JLabel("", Icon.icon("sweblaf"), JLabel.LEADING));
+				hoz.setOpaque(false);
+				hoz.add(new JLabel("", Icon.icon("shierologo"), JLabel.LEADING));
+				hoz.add(new JLabel("", Icon.icon("stexturepacker"), JLabel.LEADING));
+				popupContent.add(hoz);
+				UIUtils.setUndecorated(popupContent, false);
+				UIUtils.setMargin(popupContent, new Insets(0,0,0,0));
+				UIUtils.setDrawSides(popupContent, false, false, false, false);
+				dialog.getContentPane().add(popupContent);
+				dialog.pack();
+				dialog.setSize(525, 500);
+				Dimension Size = Toolkit.getDefaultToolkit().getScreenSize();  
+				dialog.setLocation(new Double((Size.getWidth()/2) - (dialog.getWidth()/2)).intValue(), 
+						new Double((Size.getHeight()/2) - (dialog.getHeight()/2)).intValue());  
+				dialog.setVisible(true);
+			}
+		}));
 	}
 	
 	void initFile(){
@@ -212,10 +229,20 @@ final public class ToolBar extends JPanel {
 	}
 
 	void initOptions(){
+        optionsPanel = new OptionsPanel();
 	    add(Style.createToolPanel("Options", "options", new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Content.toggleOptions();
+				JDialog dialog = new JDialog(Frame.getInstance(), "Options", false);
+				dialog.setResizable(false);
+				dialog.getContentPane().setLayout(new BorderLayout());
+				dialog.getContentPane().add(optionsPanel);
+				dialog.pack();
+				dialog.setSize(525, 500);
+				Dimension Size = Toolkit.getDefaultToolkit().getScreenSize();  
+				dialog.setLocation(new Double((Size.getWidth()/2) - (dialog.getWidth()/2)).intValue(), 
+						new Double((Size.getHeight()/2) - (dialog.getHeight()/2)).intValue());  
+				dialog.setVisible(true);
 			}
 	    	
 	    }));

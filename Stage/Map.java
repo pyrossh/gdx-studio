@@ -1,6 +1,3 @@
-
-
-
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapLayers;
@@ -101,5 +98,39 @@ public class Map extends Group{
 	
 	public MapLayers getMapLayers(){
 		return mlayers;
+	}
+}
+
+class MapLayerg extends Group {
+	
+	public MapLayerg(int index){
+		this.setZIndex(index);
+	}
+}
+
+class RPGMap {
+	private static RPGMap instance;
+	MapLayerg mapLayer1;
+	MapLayerg mapLayer2;
+	MapLayerg mapLayer3;
+	MapLayerg mapLayer4;
+	MapLayerg mapLayer5;
+	MapLayerg mapLayer6;
+	MapLayerg mapLayer7;
+	
+	private RPGMap(){
+		mapLayer1 = new MapLayerg(1);
+		mapLayer2 = new MapLayerg(2);
+		mapLayer3 = new MapLayerg(3);
+		mapLayer4 = new MapLayerg(4);
+		mapLayer5 = new MapLayerg(5);
+		mapLayer6 = new MapLayerg(6);
+		mapLayer7 = new MapLayerg(7);
+	}
+	
+	public static RPGMap getInstance(){
+		if(instance == null)
+			instance = new RPGMap();
+		return instance;
 	}
 }

@@ -41,9 +41,12 @@ public class SceneEffectPanel extends BaseTable {
 	
 	@Override
 	public void update(String... values){
-		super.update("Background", Scene.sceneBackground, "Music", Scene.sceneMusic,
-				"Transition", Scene.sceneTransition, "Duration", ""+Scene.sceneDuration,
-				"Interpolation", Scene.sceneInterpolationType.toString());
+		if(Stage.getScene() == null)
+			return;
+		Scene scene = Stage.getScene();
+		super.update("Background", scene.sceneBackground, "Music", scene.sceneMusic,
+				"Transition", scene.sceneTransition, "Duration", ""+scene.sceneDuration,
+				"Interpolation", scene.sceneInterpolationType.toString());
 		bgComboBox.removeAllItems();
 		musicComboBox.removeAllItems();
 		bgComboBox.addItem("None");
@@ -58,36 +61,38 @@ public class SceneEffectPanel extends BaseTable {
 	public void setProperty(String key, String value){
 		if(key.isEmpty() || value.isEmpty())
 			return ;
+		if(Stage.getScene() == null)
+			return;
+		Scene scene = Stage.getScene();
 		switch(key){
 			case "Background": 
-				Scene.sceneBackground = value;
-				if(!Scene.sceneBackground.equals("None"))
-					Stage.setBackground(Scene.sceneBackground);
+				scene.sceneBackground = value;
+				if(!scene.sceneBackground.equals("None"))
+					Stage.setBackground(scene.sceneBackground);
 				else
 					Stage.removeBackground();
 				break;
 			case "Music": 
-				Scene.sceneMusic = value;
-				if(!Scene.sceneMusic.equals("None"))
-					Asset.musicPlay(Scene.sceneMusic);
+				scene.sceneMusic = value;
+				if(!scene.sceneMusic.equals("None"))
+					Asset.musicPlay(scene.sceneMusic);
 				break;
 			case "Transition": 
-				Scene.sceneTransition = value;
-				doTransition();break;
+				scene.sceneTransition = value;
+				Effect.transition(TransitionType.valueOf(scene.sceneTransition), 
+						Stage.getRoot(),scene.sceneDuration, scene.sceneInterpolationType);
+				break;
 			case "Duration": 
-				Scene.sceneDuration = Float.parseFloat(value);
-				doTransition();
+				scene.sceneDuration = Float.parseFloat(value);
+				Effect.transition(TransitionType.valueOf(scene.sceneTransition), 
+						Stage.getRoot(),scene.sceneDuration, scene.sceneInterpolationType);
 				break;
 			case "Interpolation":
-				Scene.sceneInterpolationType = InterpolationType.valueOf(value);
-				doTransition();
+				scene.sceneInterpolationType = InterpolationType.valueOf(value);
+				Effect.transition(TransitionType.valueOf(scene.sceneTransition), 
+						Stage.getRoot(),scene.sceneDuration, scene.sceneInterpolationType);
 				break;
 		}
 		SceneEditor.isDirty = true;
-	}
-	
-	void doTransition(){
-		Effect.transition(TransitionType.valueOf(Scene.sceneTransition), 
-				Stage.getRoot(),Scene.sceneDuration, Scene.sceneInterpolationType);
 	}
 }

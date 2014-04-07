@@ -1,11 +1,13 @@
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.DefaultCellEditor;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -59,7 +61,7 @@ public class ProjectPanel extends JPanel implements ActionListener, TableModelLi
         }
 	};
 	
-	JButton moreBtn = new JButton("More");
+	JButton moreBtn;
 	static JLabel prjIcon = new JLabel();
 	static List<TableCellEditor> editors = new ArrayList<TableCellEditor>(3);
 	static JTextField versionField = new JTextField();
@@ -72,8 +74,10 @@ public class ProjectPanel extends JPanel implements ActionListener, TableModelLi
 	
 	public ProjectPanel(){
 		super(new VerticalFlowLayout());
+		UIUtils.setUndecorated(this, true);
 		UIUtils.setShadeWidth(this, 0);
 		UIUtils.setRound(this, 0);
+		UIUtils.setDrawSides(this, false, false, false, false);
 		propTable.setTableHeader(null);
 		propTable.setDefaultRenderer(String.class, new BaseRenderer());
 		propTable.setShowGrid(true);
@@ -89,16 +93,28 @@ public class ProjectPanel extends JPanel implements ActionListener, TableModelLi
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
 		scrollPane.setPreferredSize(new Dimension(168, 48));
 		UIUtils.setDrawBorder(scrollPane, false);
-		add(Style.createHeaderButton("Project", this));
+		add(new Style.TitleButton("Project", this));
 		JPanel hoz1 = new JPanel(new HorizontalFlowLayout(0));
-		UIUtils.setUndecorated(hoz1, true);
 		hoz1.setBackground(Color.black);
 		hoz1.add(prjIcon);
 		hoz1.add(scrollPane);
 		add(hoz1);
+		moreBtn = new JButton("More");
 		UIUtils.setUndecorated(moreBtn, true);
 		UIUtils.setShadeWidth(moreBtn, 0);
-		add(moreBtn);
+		UIUtils.setDrawFocus(moreBtn, false);
+		UIUtils.setRound(moreBtn, 0);
+		UIUtils.setRolloverDecoratedOnly(moreBtn, true);
+		moreBtn.setOpaque(false);
+		//moreBtn.setPreferredSize(new Dimension(100, 20));
+		JPanel p = new JPanel();
+		p.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Style.border));
+		//p.setPreferredSize(new Dimension(200, 20));
+		UIUtils.setUndecorated(p, true);
+		UIUtils.setMargin(p, new Insets(0,0,0,0));
+		UIUtils.setMargin(moreBtn, new Insets(0,0,0,0));
+		p.add(moreBtn);
+		add(p);
 		if(Content.projectExists())
 			update();
 		propModel.addTableModelListener(this);
