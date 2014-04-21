@@ -100,11 +100,11 @@ Thanks to all these awesome frameworks
 
 Screenshots
 -----------
-![alt text](https://github.com/pyros2097/GdxStudio/raw/master/shots/shot2.png "")
-![alt text](https://github.com/pyros2097/GdxStudio/raw/master/shots/shot3.png "")
-![alt text](https://github.com/pyros2097/GdxStudio/raw/master/shots/shot4.png "")
-![alt text](https://github.com/pyros2097/GdxStudio/raw/master/shots/shot5.png "")
-![alt text](https://github.com/pyros2097/GdxStudio/raw/master/shots/shot6.png "")
+<img src = "https://github.com/pyros2097/GdxStudio/raw/master/shots/shot2.png">
+<img src = "https://github.com/pyros2097/GdxStudio/raw/master/shots/shot3.png">
+<img src = "https://github.com/pyros2097/GdxStudio/raw/master/shots/shot4.png">
+<img src = "https://github.com/pyros2097/GdxStudio/raw/master/shots/shot5.png">
+<img src = "https://github.com/pyros2097/GdxStudio/raw/master/shots/shot6.png">
 
 Documentation
 -------------
