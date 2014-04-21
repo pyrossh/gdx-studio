@@ -1,29 +1,32 @@
+package source;
+
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import scene2d.*;
 
 /** A Basic Main Menu for the Game
  * <p>
  * The Main Menu Displays all the scenes to which the game can switch too. Based on which button or
- * image or widget pressed the scene can be switched.
+ * image or widget pressed the scene can be switched. 
  * <p>
  * @author pyros2097 */
 public class Menu extends Scene {
 
     public Menu(){
-        Stage.log("Hello World");
-        Stage.log("new dat");
-        Stage.showToast("Toasting", 2f);
+        log("Hello World");
+        log("new dat");
+        showToast("Toasting", 2f);
     }
 
     @Override
     public void onClick(Actor actor){
         if(actor.getName().equals("Play"))
-           Stage.setScene("Game");
+           setScene("Game");
         if(actor.getName().equals("Play3d"))
-           Stage.setScene("Game3d");
+           setScene("Game3d");
         if(actor.getName().equals("Options"))
-           Stage.setScene("Options");
+           setScene("Options");
         if(actor.getName().equals("Exit"))
-            Stage.showMessageDialog("Exit", "    Are you sure you want \n    to Quit the Game   ");
+           showMessageDialog("Exit", "    Are you sure you want \n    to Quit the Game   ");
     }
 
     @Override
@@ -39,9 +42,9 @@ public class Menu extends Scene {
     @Override
     public void onGesture(GestureType type){
         if(type == GestureType.Up)
-            Stage.log("Up");
+            log("Up");
         else if(type == GestureType.Down)
-            Stage.log("Down");
+            log("Down");
     }
 
     @Override

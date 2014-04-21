@@ -1,26 +1,28 @@
-import com.badlogic.gdx.scenes.scene2d.Actor;
+package source;
 
-/** A Basic Options Scene for the Game
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import scene2d.*;
+
+/** A Basic Main Menu for the Game
  * <p>
- * The Options Scene displays the necessary settings which can be modified by the user like
- * musicOn, soundOn, panCamera, battleAnimations etc. The widgets once changed must persist
- * the changes to the preferences which can be accessed by Config.prefs
+ * The Main Menu Displays all the scenes to which the game can switch too. Based on which button or
+ * image or widget pressed the scene can be switched. 
  * <p>
  * @author pyros2097 */
 public class Options extends Scene {
 
     public Options(){
-        Stage.log("Hello From Options");
     }
 
     @Override
     public void onClick(Actor actor){
         if(actor.getName().equals("Back"))
-           Stage.setScene("Menu");
+           setScene("Menu");
     }
 
     @Override
-    public void onTouchDown(Actor actor){}
+    public void onTouchDown(Actor actor){
+    }
 
     @Override
     public void onTouchUp(){}
@@ -29,7 +31,12 @@ public class Options extends Scene {
     public void onDragged(){}
 
     @Override
-    public void onGesture(GestureType type){}
+    public void onGesture(GestureType type){
+        if(type == GestureType.Up)
+            log("Up");
+        else if(type == GestureType.Down)
+            log("Down");
+    }
 
     @Override
     public void onKeyTyped(char key){
@@ -43,7 +50,7 @@ public class Options extends Scene {
     public void onKeyDown(int keycode){
     }
 
-    @Override
+     @Override
     public void onPause(){
     }
     

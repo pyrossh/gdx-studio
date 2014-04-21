@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="Panel"/>
-	<classpathentry kind="src" path="Stage"/>
-	<classpathentry kind="src" path="IDE"/>
-	<classpathentry kind="src" path="Type"/>
-	<classpathentry kind="src" path="Parser"/>
+	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="libs/gdx-backend-lwjgl-natives.jar"/>
 	<classpathentry kind="lib" path="libs/gdx-backend-lwjgl.jar"/>
@@ -18,6 +14,7 @@
 	<classpathentry kind="lib" path="libs/antlr.jar"/>
 	<classpathentry kind="lib" path="libs/ecj.jar"/>
 	<classpathentry kind="lib" path="libs/weblaflite.jar"/>
+	<classpathentry kind="lib" path="libs/scene3d.jar"/>
 	<classpathentry kind="src" path="theme"/>
 	<classpathentry kind="src" path="icon"/>
 	<classpathentry kind="src" path="src_libs"/>

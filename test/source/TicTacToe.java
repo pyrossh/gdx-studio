@@ -1,3 +1,5 @@
+package source;
+
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -5,6 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import java.util.Random;
+
+import scene2d.*;
 
 /** 
  *  A Basic TicTacToe Game
@@ -26,7 +30,7 @@ public class TicTacToe extends Scene {
             for(int j = 0;j < 3;j++){
                 Box box = new Box(i, j);
                 boxes[i][j] = box;
-                Stage.addActor(box, box.getWidth()*j, box.getHeight()*i);
+                addActor(box, box.getWidth()*j, box.getHeight()*i);
             }
         }
     }
@@ -41,22 +45,22 @@ public class TicTacToe extends Scene {
     
     public static void setMode(GameMode gm){
         gameMode = gm;
-        Stage.log("Game Mode: " + gameMode.toString());
+        log("Game Mode: " + gameMode.toString());
     }
         
     public void reset(){
-        Stage.log("Reset");
+        log("Reset");
         turnCounter = 0;
-        Stage.setScene("TicTacToe");
+        setScene("TicTacToe");
     }
 
     public void playerWin(){
-        Stage.log("Player Win");
+        log("Player Win");
         reset();
     }
     
     public void computerWin(){
-        Stage.log("Computer Win");
+        log("Computer Win");
         reset();
     }
 
@@ -66,7 +70,7 @@ public class TicTacToe extends Scene {
     void AI(){
         if(mode(GameMode.SINGLE_PLAYER_VS_COMPUTER)){
             if(currentTurn == Turn.Computer){
-                Stage.log("AI");
+                log("AI");
                 random1 = rand.nextInt(3);
                 random2 = rand.nextInt(3);
                 if(!boxes[random1][random2].isMarked){
@@ -126,7 +130,7 @@ public class TicTacToe extends Scene {
             checkForDiagonal();
         }
         else{
-            Stage.log("Draw Match");
+            log("Draw Match");
             reset();
         }
     }
@@ -199,7 +203,7 @@ class Box extends Group{
                     else if(TicTacToe.mode(GameMode.SINGLE_PLAYER_VS_COMPUTER))
                         if(TicTacToe.currentTurn == Turn.Player)
                             markByPlayer();
-                    Stage.log("Box Clicked "+Box.this.row+Box.this.col);
+                    Scene.log("Box Clicked "+Box.this.row+Box.this.col);
                 }
             }
         });
@@ -238,4 +242,4 @@ enum GameMode {
     SINGLE_PLAYER,
     SINGLE_PLAYER_VS_COMPUTER,
     MULTI_PLAYER,
-}
+}

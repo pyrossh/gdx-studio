@@ -1,6 +1,9 @@
+package source;
+
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import scene2d.*;
 
 /** A Basic Game Scene for the Game
  * <p>
@@ -20,24 +23,25 @@ public class Game extends Scene {
     String btnName = "";
     
     public Game(){
-        Stage.addHud(Stage.findActor("Up"));
-        Stage.addHud(Stage.findActor("Right"));
-        Stage.addHud(Stage.findActor("Left"));
-        Stage.addHud(Stage.findActor("Down"));
-        Stage.addHud(Stage.findActor("Timer"));
-        Stage.addHud(Stage.findActor("Label3"));
-        Stage.addHud(Stage.findActor("Fire"));
+        Camera.addHud("Up");
+        Camera.addHud("Right");
+        Camera.addHud("Left");
+        Camera.addHud("Down");
+        Camera.addHud("Timer");
+        Camera.addHud("Label3");
+        Camera.addHud("Fire");
 
-        Stage.setFollowSpeed(0.33f);
-        player = (ImageJson) Stage.findActor("Player");
-        enemy = (ImageJson) Stage.findActor("Enemy");
-        Stage.followActorContinuously(player);
-        timer = (Label)Stage.findActor("Timer");
-        startTime = Stage.gameUptime;
+        Camera.setFollowSpeed(1f);
+        player = (ImageJson) findActor("Player");
+        enemy = (ImageJson) findActor("Enemy");
+        Camera.followActorContinuously(player);
+        timer = (Label)findActor("Timer");
+        startTime = gameUptime;
     }
 
     @Override
     public void onTouchDown(Actor actor){
+        log(actor.getName());
         touchedDown = true;
         btnName = actor.getName();
     }
@@ -45,7 +49,7 @@ public class Game extends Scene {
     @Override
     public void onClick(Actor actor){
         if(actor.getName().equals("Back"))
-            Stage.setScene("Menu");
+            setScene("Menu");
         if(actor.getName().equals("Fire"))
             doFire();
     }
@@ -55,17 +59,18 @@ public class Game extends Scene {
         bullet.setPosition(player.getX() + 50, player.getY() + 50);
         bullet.setSize(25, 25);
         bullet.addAction(Actions.sequence(Actions.moveBy(500, 0, 1f), Actions.removeActor(bullet)));
-        Stage.addActor(bullet);
+        addActor(bullet);
     }
 
     @Override
     public void act(float delta){
-        diff = Stage.gameUptime - startTime;
+        super.act(delta);
+        diff = gameUptime - startTime;
         timer.setText("Timer: "+diff);
         if(diff>=30)
-            Stage.setScene("GameOver");
-        if(Stage.collides(player, enemy))
-            Stage.setScene("GameWin");
+            setScene("GameOver");
+        if(collides(player, enemy))
+            setScene("GameWin");
         //player.clearActions();
         switch(btnName){
             case "Right": player.addAction(Actions.moveBy(playerSpeed, 0, 0.1f)); break;

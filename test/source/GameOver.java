@@ -1,4 +1,7 @@
+package source;
+
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import scene2d.*;
 
 /** A Basic Game Over Scene for the Game
  * <p>
@@ -8,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 public class GameOver extends Scene{
 
     public GameOver(){
-        Stage.setSceneWithDelay("Menu", 3f);
+        setSceneWithDelay("Menu", 3f);
     }
 
     @Override

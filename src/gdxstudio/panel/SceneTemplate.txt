@@ -1,0 +1,65 @@
+package source;
+
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.Input.Keys;
+
+import scene2d.*;
+import scene3d.*;
+
+public class $$$ extends Scene {
+
+	public $$$(){
+	}
+	
+	@Override
+	public void act(float delta){
+		super.act(delta);
+	}
+		
+	@Override
+	public void onClick(Actor actor){
+	}
+	
+	@Override
+	public void onTouchDown(Actor actor){
+	}
+	
+	@Override
+	public void onTouchUp(){
+	}
+	
+	@Override
+	public void onDragged(){
+	}
+	
+	@Override
+	public void onGesture(GestureType type){
+	}
+	
+	@Override
+    public void onKeyTyped(char key){
+    }
+    
+    @Override
+    public void onKeyUp(int keycode){
+    }
+    
+    @Override
+    public void onKeyDown(int keycode){
+    }
+		
+	@Override
+	public void onPause(){
+	}
+	
+	@Override
+	public void onResume(){
+	}
+		
+	@Override
+	public void onDispose(){
+	}
+}

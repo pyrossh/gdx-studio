@@ -1,4 +1,7 @@
+package source;
+
 import com.badlogic.gdx.Gdx;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -7,6 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+
+import scene2d.*;
 
 /** A Basic SplashScreen for the Game
  * <p>
@@ -33,10 +38,10 @@ public class Splash extends Scene {
         loadingLabel = new Label(loadingText, Asset.skin);
         loadingLabel.setColor(Color.BLACK);
         loadingLabel.setFontScale(3f);
-        Stage.addActor(imgbg1);
-        Stage.addActor(imgbg2);
-        Stage.addActor(loadingLabel, Stage.targetWidth/2, 23f);
-        Stage.addAction(Actions.sequence(Actions.delay(4f), Actions.removeActor(imgbg1)
+        addActor(imgbg1);
+        addActor(imgbg2);
+        addActor(loadingLabel, targetWidth/2, 23f);
+        addAction(Actions.sequence(Actions.delay(4f), Actions.removeActor(imgbg1)
         , Actions.delay(4f), Actions.removeActor(imgbg2)));
         
         loadingLabel.addAction(Actions.forever(Actions.forever(Actions.sequence(
