@@ -57,9 +57,12 @@ public class OptionsPanel extends JPanel implements ActionListener {
         menuItem(content1, right, "Show Right SideBar");
         menuItem(content1, status, "Show StatusBar");
         row1.add(content1);
-        if(!left.load()) Frame.toggleLeftSideBar();
-        if(!right.load()) Frame.toggleRightSideBar();
-        if(!status.load()) Frame.toggleStatusBar();
+        /*
+         *  Rewrite this with first launch
+         */
+        //if(!left.load()) Frame.toggleLeftSideBar();
+        //if(!right.load()) Frame.toggleRightSideBar();
+        //if(!status.load()) Frame.toggleStatusBar();
         left.addActionListener(new ActionListener(){
      		@Override
      		public void actionPerformed(ActionEvent arg0) {

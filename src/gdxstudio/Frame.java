@@ -143,7 +143,7 @@ final public class Frame extends JFrame implements WindowListener{
     	propertyPanel.clear();
     	eventPanel.clear();
     	
-    	sceneEffectPanel.update();
+    	//sceneEffectPanel.update();
 		projectPanel.update();
 		projectSettingsPanel.update();
 		eventPanel.update();
@@ -165,7 +165,7 @@ final public class Frame extends JFrame implements WindowListener{
 	}
     
 	private static void enableProject(){
-		enablePanel(toolBar);
+		//enablePanel(toolBar);
     	enablePanel(content);
     	enablePanel(rightSideBar);
     	enablePanel(leftSideBar);
@@ -176,7 +176,7 @@ final public class Frame extends JFrame implements WindowListener{
     }
     
     private static void disableProject(){
-    	disablePanel(toolBar);
+    	//disablePanel(toolBar);
     	disablePanel(content);
     	disablePanel(rightSideBar);
     	disablePanel(leftSideBar);
