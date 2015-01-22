@@ -258,3 +258,6 @@ Asset.soundPlay("soundname");
 
 //The asset functions will return null for Font, TextureRegion and Animation if the asset cannot be found
 ```
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/pyros2097/gdxstudio/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
