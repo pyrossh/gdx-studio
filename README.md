@@ -1,10 +1,13 @@
 GdxStudio 0.7.1
 ================
-GdxStudio is used for creating awesome games using libGdx.
-It has all the features of libgdx built-in so you can easily,start creating games with it. Tools like Font Editor, Particle Editor, Texture Packer, SceneEditor, MapEditor, ActorEditor, ImagingTools are already built into it. 
-It also has a powerful Game Framework based on libGDX inbuilt which allows the game coder to concentrate on the logic of the game and not bother about setting up assets or configuration. It has Automatic Asset Loading including Atlas, TextureRegions, BitmapFonts, Music, Sound.
-It has the Latest Stable Version of libGdx inside it so you don't need to download the libGdx at all,
-when exporting your game to jar for desktop it automatically loads these libraries into it.
+GdxStudio is used for creating awesome games using libGdx.  
+It has all the features of libgdx built-in so you can easily,start creating games with it.  
+Tools like Font Editor, Particle Editor, Texture Packer, SceneEditor, MapEditor, ActorEditor, ImagingTools are already built into it. 
+It also has a powerful Game Framework based on libGDX inbuilt which allows the game coder to concentrate on the logic of the game and not bother about setting up assets or configuration.  
+Automatic Asset Loading including Atlas, TextureRegions, BitmapFonts, Music, Sound.  
+It has the libGdx(v0.9.9) inside it so you don't need to download the libGdx at all, when exporting your game to jar for desktop it automatically loads these libraries into it.  
+
+(Will update this project to latest libgdx since I might get some time to work on this again and fix those issues)
 
 >**Disclaimer**  This is not an official libdgx project so don't ask them for bug fixes  
 
