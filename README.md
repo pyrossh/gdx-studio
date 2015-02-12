@@ -109,6 +109,7 @@ Documentation
 -------------
 Scene
 -----
+```
 <p>
 It consists of a single Stage2d, Stage3d, Camera2d, and Camera3d which are all initialized based on the config file.
 The root of the stage can be accessed in a statically {@link Scene#getRoot()} and methods related to camera like moveTo, moveBy,
@@ -133,7 +134,7 @@ If you want to display your splash screen for more time after the assets have lo
 Stage.splashDuration to the amount of time you want you splash screen to show. By default the splash screen's
 lifetime is finished once the assets are loaded and then the next scene is set.
 </p>
-
+```
 Camera
 ------
 ```java
