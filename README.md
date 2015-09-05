@@ -1,5 +1,13 @@
-GdxStudio 0.7.1
-================
+#Deprecated
+Please use https://github.com/UnderwaterApps/overlap2d instead. This project could have done pretty well but I didn't get enough time for complete it. Plus since I joined the startup culture I don't get much time to work on open source projects anymore. But the **Idea** was
+really good and you know you could create games in java and json just like that. I thought of crowdfunding this at kickstarter as it seemed pretty good when it was working on my system but then I found out kickstarter is for US citizens only so that was a bummer. Then the I joined Playlyfe. And from then on it was something on the lines like this,
+
+>
+I am a busy guy. When I first started this I was out of college searching for a job and had a lot of free time, which is way different from being in The Real World today.
+My life consists of waking up -> getting stuck in a traffic -> working for 4 hours -> lunch for an hour -> working for 5 more hours -> getting stuck in traffic on the way home -> shower and sleep -> repeat 5 days a week. On weekends I have to run errands and research to stay competitive in an incredibly cut throat industry. I have very little time to spare.
+An Excerpt taken from http://lazyfoo.net/contact.php
+
+## GdxStudio 0.7.1
 GdxStudio is used for creating awesome games using libGdx.  
 It has all the features of libgdx built-in so you can easily,start creating games with it.  
 Tools like Font Editor, Particle Editor, Texture Packer, SceneEditor, MapEditor, ActorEditor, ImagingTools are already built into it. 
