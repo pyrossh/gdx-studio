@@ -1,5 +1,5 @@
-#Deprecated
-Please use https://github.com/UnderwaterApps/overlap2d instead. This project could have done pretty well but I didn't get enough time for complete it. Plus since I joined the startup culture I don't get much time to work on open source projects anymore. But the **Idea** was
+# Deprecated
+This project could have done pretty well but I didn't get enough time for complete it. Plus since I joined the startup culture I don't get much time to work on open source projects anymore. But the **Idea** was
 really good and you know you could create games in java and json just like that. I thought of crowdfunding this at kickstarter as it seemed pretty good when it was working on my system but then I found out kickstarter is for US citizens only so that was a bummer. Then the I joined Playlyfe. And from then on it was something on the lines like this,
 
 >
@@ -18,8 +18,6 @@ It has the libGdx(v0.9.9) inside it so you don't need to download the libGdx at 
 (Will update this project to latest libgdx since I might get some time to work on this again and fix those issues)
 
 >**Disclaimer**  This is not an official libdgx project so don't ask them for bug fixes  
-
-[See the Wiki for more details](https://github.com/pyros2097/GdxStudio/wiki)  
 
 Features
 ---------
@@ -51,6 +49,14 @@ for different platforms and exporting is done automatically.(android and ios not
 You can edit your scenes and add logic to your game and at the same time see the outcome in the studio.
 Your source files are automatically compiled and loaded into the class loader and displayed in the studio.
 So your don't need to follow the monotonous approach compile->build->run exe. This saves a lot of time.  
+
+Screenshots
+-----------
+<img src = "https://github.com/pyros2097/GdxStudio/raw/master/shots/shot2.png">
+<img src = "https://github.com/pyros2097/GdxStudio/raw/master/shots/shot3.png">
+<img src = "https://github.com/pyros2097/GdxStudio/raw/master/shots/shot4.png">
+<img src = "https://github.com/pyros2097/GdxStudio/raw/master/shots/shot5.png">
+<img src = "https://github.com/pyros2097/GdxStudio/raw/master/shots/shot6.png">
 
 Using
 ------
@@ -85,12 +91,6 @@ Using
 		}
 	}
 ```				  	  					  	  					  	
-Todo
------
-1. MapEditor
-2. ActorEditor
-3. Automatic Updates
-4. Make a signals/slots method for connecting actors with events (maybe make an interpreter)
 
 Credits
 --------
@@ -105,13 +105,12 @@ Thanks to all these awesome frameworks
 [ANTLR](http://www.antlr.org/)  
 [ProGuard](http://proguard.sourceforge.net)  
 
-Screenshots
------------
-<img src = "https://github.com/pyros2097/GdxStudio/raw/master/shots/shot2.png">
-<img src = "https://github.com/pyros2097/GdxStudio/raw/master/shots/shot3.png">
-<img src = "https://github.com/pyros2097/GdxStudio/raw/master/shots/shot4.png">
-<img src = "https://github.com/pyros2097/GdxStudio/raw/master/shots/shot5.png">
-<img src = "https://github.com/pyros2097/GdxStudio/raw/master/shots/shot6.png">
+Todo
+-----
+1. MapEditor
+2. ActorEditor
+3. Automatic Updates
+4. Make a signals/slots method for connecting actors with events (maybe make an interpreter)
 
 Documentation
 -------------
@@ -267,6 +266,4 @@ Asset.soundPlay("soundname");
 
 //The asset functions will return null for Font, TextureRegion and Animation if the asset cannot be found
 ```
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/pyros2097/gdxstudio/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
