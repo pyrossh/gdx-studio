@@ -1,5 +1,5 @@
 # Deprecated
-This project could have done pretty well but I didn't get enough time for complete it. Plus since I joined the startup culture I don't get much time to work on open source projects anymore. But the **Idea** was
+This project could have done pretty well but I didn't get enough time to complete it. Since I joined the startup culture I don't get much time to work on open source projects anymore. But the **Idea** was
 really good and you know you could create games in java and json just like that. I thought of crowdfunding this at kickstarter as it seemed pretty good when it was working on my system but then I found out kickstarter is for US citizens only so that was a bummer. Then the I joined Playlyfe. And from then on it was something on the lines like this,
 
 >
